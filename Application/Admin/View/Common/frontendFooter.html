@@ -1,0 +1,123 @@
+<div class="footer">
+	<div class="middle-container">
+		<div class="block block-1 text-left">
+			<div class="cus-table">
+				<div class="cus-table-cell">
+					<img src="__ROOT__/Public/images/other/logo.png" alt="">
+				</div>
+			</div>
+		</div>
+		<div class="block block-2 phone-port-none">
+			<div class="entry">
+				<h4 class="title">课程对象</h4>
+				<ul>
+					<li><a href="{:U('Index/toCurriculum', array('pageName' => 'curriculum', 'isChild' => 'true', 'childName' => 'child'))}">幼儿英语</a></li>
+					<li><a href="{:U('Index/toCurriculum', array('pageName' => 'curriculum', 'isChild' => 'true', 'childName' => 'teenager'))}">青少年英语</a></li>
+					<li><a href="{:U('Index/toCurriculum', array('pageName' => 'curriculum', 'isChild' => 'true', 'childName' => 'enterprise'))}">成人英语</a></li>
+					<li><a href="{:U('Index/toCurriculum', array('pageName' => 'curriculum', 'isChild' => 'true', 'childName' => 'go_abroad'))}">出国游学</a></li>
+				</ul>
+			</div>
+			<div class="entry">
+				<h4 class="title">友情连接</h4>
+				<ul>
+					<li><a href="#">飞腾移民</a></li>
+					<li><a href="#">森图生物</a></li>
+					<li><a href="#">网站地图</a></li>
+					<li><a href="#">手机版网站</a></li>
+				</ul>
+			</div>
+			<div class="entry">
+				<h4 class="title">联系我们</h4>
+				<ul>
+					<li>
+						<div class="inblk width-all">
+							<div class="col-sm-2">
+								<p>地址:</p>
+							</div>
+							<div class="col-sm-10">
+								<p>昆明市西山区广福路488号爱琴海购物公园玫瑰天街2区童乐荟3楼</p>
+							</div>
+						</div>
+					</li>
+					<li>
+						<div class="inblk width-all">
+							<div class="col-sm-2">
+								<p>电话:</p>
+							</div>
+							<div class="col-sm-10">
+								<p>0871-64632737</p>
+							</div>
+						</div>
+					</li>
+					<li>
+						<div class="inblk width-all">
+							<div class="col-sm-2">
+								<p>邮箱:</p>
+							</div>
+							<div class="col-sm-10">
+								<p>yara@mgyyxx.com</p>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+			<div class="clear"></div>
+		</div>
+		<div class="block block-3 text-right">
+			<div class="cus-table">
+				<div class="cus-table-cell">
+					<img src="__ROOT__/Public/images/other/tdc.png" alt="">
+				</div>
+			</div>
+		</div>
+		<div class="block block-4 phone-port-block">
+			<p>电话: 400-2323-232</p>
+			<p>邮箱: info@demolink.org</p>
+			<p>地址: 云南省昆明市西山区前兴路万达广场南塔2705</p>
+		</div>
+		<div class="clear"></div>
+	</div>
+</div>
+
+<p class="footer-bottom">Copyright &copy; 2017 MeiGao international. All rights reserved. <span> </span>沪ICP备12033796号-3</p>
+<style>
+	.footer { box-shadow: 0 -1px 7px 1px #ddd; }
+	.footer .block { float: left; height: 300px; }
+	.footer .block-1 img { width: 70%; height: auto; }
+	.footer .block-3 img { width: 50%; height: auto; }
+	.footer .block-1,
+	.footer .block-3 { width: 20%; }
+	.footer .block-2 { width: 60%; box-sizing: border-box; padding: 50px 50px; }
+
+	.footer .block-2 .entry {  width: 25%; float: left; }
+	.footer .block-2 .entry .col-sm-2 { padding: 0; }
+	.footer .block-2 .entry .col-sm-10 { padding: 0; }
+	.footer .block-2 .entry:nth-child(3) { width: 50%; }
+	.footer .block-2 .entry .title { margin-bottom: 20px; }
+	.footer .block-2 .entry ul li { margin-bottom: 5px; }
+	.footer .block-2 .entry ul li a,
+	.footer .block-2 .entry ul li p { color: #bebebe; font-size: 14px; }
+
+	.footer-bottom { background: #fcd826; text-align: center; color: #fff; font-size: 12px; padding: 5px; }
+</style>
+<style>
+	/*手机端*/
+	@media screen and (max-width: 767px) {
+		.footer { padding: 2.5rem 0; }
+		.footer .block-1, .footer .block-3 { width: 100%; }
+		.footer .block { float: none; height: auto; text-align: center;	 }
+		.footer .cus-table { height: auto; }
+		.footer .block-1 img { width: 35%; }
+		.footer .block-3 img { width: 30%; margin-top: 1.5rem; }
+		.footer .block-4 { margin-top: 3rem; }
+		.footer .block-4 p { font-size: 1.4rem; margin-top: 0.5rem; }
+		.footer-bottom { font-size: 0.8rem; }
+	}
+</style>
+<style>
+	@media screen and (min-width: 768px) and (max-width: 1199px) {
+		.footer { padding: 0 2rem; }
+		.footer .block-2 .entry .title { font-size: 1.4rem; }
+		.footer .block-2 .entry ul li a, .footer .block-2 .entry ul li p { font-size: 1.1rem; }
+	}
+</style>

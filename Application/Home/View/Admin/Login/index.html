@@ -1,0 +1,56 @@
+<html>
+	<head>
+		<include file="brandCommon:head" />
+	</head>
+	<body class="wrapper login-container">
+		<div class="bg-container width-all height-all bg-black text-center">
+			<div class="cus-table">
+				<div class="cus-table-cell">
+					<div class="login panel panel-default">
+						<div class="panel-heading">
+							<h3 class="title"><img style="width: auto; height: 50px;" src="__ROOT__/Public/images/other/logo.png" alt=""> <a href="#" onclick="cancel(this)"><!-- <i class="icon-remove-sign pull-right"></i> --></a></h3>
+						</div>
+						<div class="panel-body">
+							<form class="adminLogin" role="form" action="" method="POST">
+							  <div class="form-group">
+							    <label for="username">用户名</label>
+							    <input name="username" type="text" class="form-control" id="username" placeholder="username" autocomplete="off" required="">
+							  </div>
+							  <div class="form-group">
+							    <label for="password">密码</label>
+							    <input name="password" type="password" class="form-control" id="password" placeholder="Password" autocomplete="off" required="">
+							  </div>
+							  <div>
+							  	<button type="submit" class="btn btn-primary btn-submit"><i class="icon-upload"></i> 登录</button>
+							  	<p class="error-msg red pull-right"></p>
+							  </div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script>
+		(function($) {
+			$(function() {
+				$('.btn-submit').on('click', function() {
+					var username = $('#username').val();
+					var password = $('#password').val();
+					$.ajax({
+						url: '__ROOT__/index.php/Home/Login/login',
+						type: 'POST',
+						data: {'username': username, 'password': password}
+					}).done(function(res) {
+						if (res.msg == 'success') {
+							window.location.href = '__ROOT__/index.php/Home/Admin/Index/index';
+						}else {
+							$('.error-msg').html(res.info);
+						}
+					});
+					return false;
+				});
+			});
+		})(jQuery);
+		</script>
+	</body>
+</html>

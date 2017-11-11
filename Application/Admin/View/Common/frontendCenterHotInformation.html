@@ -1,0 +1,34 @@
+<div class="headline">
+	<h4 class="title inblk">热门资讯</h4>
+	<?php 
+		$Dao = A('Admin');
+		// 已收藏
+		$curCollection = $Dao -> frontendNewsCollectionSelectByUserId(session('mgUserId'));
+		foreach ($curCollection as $key => $value) {
+			if (!empty($value['information_id'])) {
+				$collection[] = $value['information_id'];
+			}
+		}
+		// var_dump($curCollection);
+		// var_dump($collection); 
+		$result = $Dao -> selectGetCount('Information',0,20);
+		// var_dump($result);
+		foreach($result as $key => $val):
+	 ?>
+	<div class="entry">
+		<a href="{:U('Index/toNews', array('pageName' => 'news', 'isChild' => 'true', 'childName' => 'detail', 'pageId' => $val['id'], 'tableName' => 'Information'))}" target="_blank">
+			<p class="description"><span class="cus-disc"></span> <?php echo $val['title']; ?></p>
+		</a>
+		<div class="collection <?php foreach($collection as $k => $v){if($v==$val["id"]){echo 'active';}} ?>">
+			<p class="gray-1 date"><?php echo $val['publish_time']; ?></p>
+			<a class="unactive btn-collection" href="#" data-id="<?php echo $val['id']; ?>" data-model="information" data-userid="<?php echo session('mgUserId'); ?>">
+				<img src="__ROOT__/Public/images/other/star-gray.png" alt="">
+			</a>
+			<a class="active btn-collection-cancel" href="#" data-id="<?php echo $val['id']; ?>" data-model="information" data-userid="<?php echo session('mgUserId'); ?>">
+				<img src="__ROOT__/Public/images/other/star-yellow.png" alt="">
+			</a>
+			<div class="clear"></div>
+		</div>
+	</div>
+	<?php endforeach; ?>
+</div>

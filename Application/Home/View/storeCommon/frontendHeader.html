@@ -1,0 +1,308 @@
+<style>
+	.loading { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #fff; z-index: 2000; text-align: center; }
+	.loading img { width: 50%; height: auto; max-width: 20rem; }
+
+	form.logout { display: inline-block; }
+	.btn-logout { padding: 0; background: none; border: none; }
+	.hover-tdc-ctn:hover .hover-tdc { opacity: 1; z-index: 1; width: 210px; height: auto; }
+	.hover-tdc { position: absolute; top: 35px; z-index: -10000; left: 0; box-shadow: 0 0 5px black; padding: 23px; width: 0px; background: rgba(255, 255, 255, 0.7); opacity: 0; transition: opacity 0.5s ease-in-out; overflow: hidden; height: 0; }
+
+	.header { background: #fcd826; position: fixed; top: 0; left: 0; z-index: 1000; width: 100%; box-shadow: 0 1px 5px #777; }
+	.header .middle-container ul li { float: left; }
+	.header .middle-container ul li a { color: black; transition: all 0.3s ease-in-out; }
+	.header .middle-container ul li a:hover { opacity: 0.7; }
+	.header .middle-container ul li button { color: black; transition: all 0.3s ease-in-out; }
+	.header .middle-container ul li button:hover { text-decoration: underline !important; opacity: 0.7; }
+	.header .middle-container >p { float: right; margin-right: 40px; }
+	.header >div.middle-container { padding: 10px 20px; transition: all 0.3s ease-out; height: 42px; }
+	.header >div.middle-container ul li:after { content: '|'; margin: 0 10px 0 9px; }
+	.header >div.middle-container ul li:last-child:after { content: ''; margin: 0; }
+	.header .logo-ctn .logo { height: 80px; width: auto; margin-top: 24px; transition: all 0.1s ease-out; }
+	.header .nav .ul-ctn { width: 80%; text-align: right; float: right; }
+	.header .nav .ul-ctn >ul >li { float: left; /*margin-right: 5%;*/ padding: 0 15px; }
+	.header .nav .ul-ctn >ul >li:last-child { margin: 0; }
+	.header .nav .ul-ctn >ul >li >a { padding: 50px 8px; display: block; border-bottom: 8px solid; color: #878787; transition: all 0.3s ease-out; border-color: white; }
+	.header .nav .ul-ctn >ul >li:hover a,
+	.header .nav .ul-ctn >ul >li.active a { color: black; border-color: #fcd826; }
+
+	.header .nav .ul-ctn >ul >li:hover .second-menu { bottom: -60px; }
+
+	.header .nav .second-menu { position: absolute; left: 0; bottom: 0px; width: 100%; padding: 10px 0; background: rgba(0,0,0,0.5); text-align: center; overflow: hidden; transition: all 0.3s ease-out; z-index: -1;  }
+	.header .nav .second-menu ul { width: 100%; display: inline-block; }
+	.header .nav .second-menu ul li { float: left; }
+	.header .nav .second-menu ul li .entry { display: inline-block; }
+	.header .nav .second-menu ul li .entry img { float: left; height: 35px; width: auto; }
+	.header .nav .second-menu ul li .entry img.unactive {  }
+	.header .nav .second-menu ul li .entry img.active { display: none; }
+	.header .nav .second-menu ul li .entry p { float: left; line-height: 35px; color: #fff; margin: 0; padding-left: 12px; letter-spacing: 3px; }
+
+	.header .nav .second-menu ul li .entry:hover img.unactive,
+	.header .nav .second-menu ul li .entry.active img.unactive { display: none; }
+	.header .nav .second-menu ul li .entry:hover img.active,
+	.header .nav .second-menu ul li .entry.active img.active { display: block; }
+	.header .nav .second-menu ul li .entry:hover p,
+	.header .nav .second-menu ul li .entry.active p { color: #feda26; }
+
+	.header .nav ul li.curriculum .second-menu ul li { width: 25%; }
+
+	.header.active .nav .ul-ctn >ul >li >a { padding: 19px 8px; }
+	.header.active .logo-ctn .logo { height: 66px; margin-top: 0; }
+	.header.active >div.middle-container { height: 0; padding: 0 0; overflow: hidden; }
+</style>
+<style>
+	/*手机端*/
+	@media screen and (max-width: 767px) {
+		.phone-port-none { display: none !important; }
+		.header { background: none; box-shadow: none; }
+		.header .middle-container ul li { height: 5.5rem; }
+		.header .middle-container ul li a { color: #bcbcbc; }
+		.header .middle-container ul li button { line-height: 5.5rem; }
+		.header >div.middle-container { border-bottom: 1px solid #bcbcbc; z-index: 1000; background: #fff; height: 5.5rem; padding: 0 1.5rem; }
+		.header >div.middle-container ul li a { line-height: 5.5rem; font-size: 1.5rem; }
+		.header >div.middle-container ul li:after { content: ''; }
+		.header .nav .ul-ctn { width: 100%; text-align: left; }
+		.header .nav .ul-ctn >ul { float: left !important; width: 100% !important; box-shadow: 1px 1px 0px #aaa; }
+		.header .nav .ul-ctn >ul >li { float: none; margin-left: 0; padding: 0; height: auto; }
+		.header .nav .ul-ctn >ul >li >a { padding: 2.5rem 2.5rem !important; border: none; }
+		.header .nav .ul-ctn >ul >li.active a { background: #fcd826; }
+		.header .phone-port-nav p { font-size: 2.5rem; line-height: 5.5rem; }
+		.header .phone-port-nav p i { display: inline-block; width: 2.2rem; }
+		.header .phone-port-nav p span { font-size: 1.4rem; }
+		.phone-port-menu-ctn { background: none; left: -40rem; transition: all 0.5s ease-in-out; width: 100%; max-height: 0; overflow: hidden; }
+		.phone-port-menu-ctn.active { left: 0; max-height: 80%; z-index: 10000; }
+		.header .phone-port-menu { margin: 0; background: #fff !important; }
+		.header .nav .ul-ctn >ul >li .second-menu { position: initial; padding: 0; }
+		.header .nav ul li.curriculum .second-menu ul li { float: none; width: 100%; text-align: left; }
+		.header .nav ul li.curriculum .second-menu ul li .entry img { display: none !important; }
+		.header .nav ul li { position: relative; }
+		.header .nav .second-menu .phone-port-second-menu { position: absolute; right: 0; top: 0; background: #aaa; width: 2rem; height: 2rem; border-radius: 100rem; }
+		.header .nav .second-menu ul { padding-left: 0rem; max-height: 0; transition: all 0.3s ease-in-out; overflow: hidden; }
+		.header .nav .second-menu ul.active { max-height: 20rem; padding-left: 3rem; }
+		.header .nav .second-menu ul li .entry p {  }
+
+		.header .nav .arrow-right-ctn { height: auto; top: 2rem; }
+		.header .nav .arrow-right-ctn .arrow { width: 3rem; background: #ddd; height: 3rem; text-align: center; vertical-align: middle; border-radius: 100rem; }
+		.header .nav .arrow-right-ctn .arrow i { height: 100%; display: inline-block; padding: 0; vertical-align: middle; margin-top: 1rem; }
+	}
+</style>
+<style>
+	/*平板*/
+	@media screen and (min-width: 768px) and (max-width: 1199px) {
+		.header .nav .logo-ctn { display: none !important; }
+		.header .nav .ul-ctn { width: 100%; font-size: 1.2rem; text-align: center; }
+		.header .nav .ul-ctn >ul >li >a { font-size: 1.4rem; }
+
+		.header .nav .second-menu { padding: 20px 0; }
+		.header .nav .second-menu ul li .entry p { font-size: 1.4rem; line-height: 20px; }
+		.header .nav .second-menu ul li .entry img { height: 20px; }
+
+		.header >div.middle-container .hover-tdc-ctn { display: none; }
+	}
+</style>
+
+<img style="width: 0 !important; height: 0 !important; overflow: hidden;" src="__ROOT__/Public/images/other/logo.jpg" alt="">
+
+<div class="loading">
+	<div class="cus-table">
+		<div class="cus-table-cell">
+			<img src="__ROOT__/Public/images/other/loading.gif" alt="">
+		</div>
+	</div>
+</div>
+
+<div class="header relative">
+	<div class="middle-container">
+		<div class="phone-port-block phone-port-nav pull-left">
+			<p><i class="icon-reorder"></i><span>
+				<?php
+					if($pageName == 'homepage' || empty($pageName)){ echo 'Home 首页'; }
+					if($pageName == 'curriculum'){ echo 'Course 课程'; }
+					if($pageName == 'student'){ echo 'Students 学员'; }
+					if($pageName == 'news'){ echo 'News 新闻'; }
+					if($pageName == 'about'){ echo 'About 美高简介'; }
+					if($pageName == 'partner'){ echo 'Partner 合作伙伴'; }
+					if($pageName == 'center'){ echo 'Center 个人中心'; }
+				?>
+			</span></p>
+		</div>
+		<ul class="inblk pull-right">
+			<?php 
+				$userId = session('mgUserId');
+				$Dao = A('Admin');
+				$User = $Dao -> selectOne('User', $userId);
+				$User = $User[0];
+			 ?>
+			<?php $mgLoginStatus = session('mgLoginStatus'); ?>
+			<?php if(!empty($mgLoginStatus)): ?>
+				<li>
+					<a href="{:U('Index/toCenter', array('pageName' => 'center', 'isChild' => 'true', 'childName' => 'index'))}"><?php echo 'Hi '.$User['name']; ?></a>
+				</li>
+			<?php endif; ?>
+			<li>
+				<?php if(empty($mgLoginStatus)): ?>
+					<a class="btn-login" href="#">用户登录</a>
+				<?php endif; ?>
+
+				<?php if(!empty($mgLoginStatus)): ?>
+					<form class="logout" action="{:U('Index/logout')}">
+						<button class="btn-logout" type="submit">注销</button>
+					</form>
+				<?php endif; ?>
+			</li>
+			<li class="phone-port-none">
+				<a class="btn-download" href="{:U('Index/toNews', array('pageName' => 'news', 'model' => 'download'))}">资料下载</a>
+				<!-- <a class="btn-download" href="#">资料下载</a> -->
+			</li>
+		</ul>
+		<?php 
+            // session('email', $result[0]['email']);
+            // session('phone', $result[0]['phone']);
+            // session('name', $result[0]['name']);
+            // session('level', $result[0]['level']);
+		 ?>
+		<p class="white phone-port-none"><i class="icon-phone"></i> 0871-64632737</p>
+		<div class="relative pull-right hover-tdc-ctn phone-port-none" style="margin-right: 40px;">
+			<p class="white" style="font-size: 20px; transform: scale(1.3,1.5);"><i class="icon-tablet"></i></p>
+			<div class="hover-tdc">
+				<img src="__ROOT__/Public/images/other/tdc.png" alt="">
+			</div>
+		</div>
+		<div class="clear"></div>
+	</div>
+	<div class="bg-white relative phone-port-menu-ctn">
+		<div class="nav middle-container bg-white phone-port-menu">
+			<div class="logo-ctn pull-left phone-port-none" style="width: 20%;">
+				<img class="logo" src="__ROOT__/Public/images/other/logo.png" alt="">
+			</div>
+			<div class="ul-ctn">
+				<ul class="inblk">
+					<li class="homepage <?php if($pageName == 'homepage' || empty($pageName)){ echo 'active'; } ?>">
+						<a href="{:U('Index/index', array('pageName' => 'homepage'))}">Home 首页</a>
+					</li>
+					<li class="curriculum <?php if($pageName == 'curriculum'){ echo 'active'; } ?>">
+						<a href="{:U('Index/toCurriculum', array('pageName' => 'curriculum', 'isChild' => 'true', 'childName' => 'child'))}">Course 课程</a>
+						<div class="arrow-right-ctn phone-port-block"><div class="cus-table"><div class="cus-table-cell"><div class="arrow"><i class="icon-angle-down"></i></div></div></div></div>
+						<div class="second-menu">
+							<div class="middle-container">
+								<ul>
+									<li>
+										<div class="entry <?php if($childName == 'child'){echo 'active';} ?>">
+											<a href="{:U('Index/toCurriculum', array('pageName' => 'curriculum', 'isChild' => 'true', 'childName' => 'child'))}">
+												<img class="active" src="__ROOT__/Public/images/other/curriculum/child/second-menu-icon-1-1.png" alt="">
+												<img class="unactive" src="__ROOT__/Public/images/other/curriculum/child/second-menu-icon-1-2.png" alt="">
+												<p>幼儿课程</p>
+											</a>
+										</div>
+									</li>
+									<li>
+										<div class="entry <?php if($childName == 'teenager'){echo 'active';} ?>">
+											<a href="{:U('Index/toCurriculum', array('pageName' => 'curriculum', 'isChild' => 'true', 'childName' => 'teenager'))}">
+												<img class="active" src="__ROOT__/Public/images/other/curriculum/child/second-menu-icon-3-1.png" alt="">
+												<img class="unactive" src="__ROOT__/Public/images/other/curriculum/child/second-menu-icon-3-2.png" alt="">
+											</a>
+											<a href="{:U('Index/toCurriculum', array('pageName' => 'curriculum', 'isChild' => 'true', 'childName' => 'teenager'))}">
+												<p>青少课程</p>
+											</a>
+										</div>
+									</li>
+									<li>
+										<div class="entry <?php if($childName == 'go_abroad'){echo 'active';} ?>">
+											<a href="{:U('Index/toCurriculum', array('pageName' => 'curriculum', 'isChild' => 'true', 'childName' => 'go_abroad'))}">
+												<img class="active" src="__ROOT__/Public/images/other/curriculum/child/second-menu-icon-3-1.png" alt="">
+												<img class="unactive" src="__ROOT__/Public/images/other/curriculum/child/second-menu-icon-3-2.png" alt="">
+												<p>出国游学</p>
+											</a>
+										</div>
+									</li>
+									<li>
+										<div class="entry <?php if($childName == 'enterprise'){echo 'active';} ?>">
+											<a href="{:U('Index/toCurriculum', array('pageName' => 'curriculum', 'isChild' => 'true', 'childName' => 'enterprise'))}">
+												<img class="active" src="__ROOT__/Public/images/other/curriculum/child/second-menu-icon-2-1.png" alt="">
+												<img class="unactive" src="__ROOT__/Public/images/other/curriculum/child/second-menu-icon-2-2.png" alt="">
+												<p>综合英语</p>
+											</a>
+										</div>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</li>
+					<li class="student <?php if($pageName == 'student'){ echo 'active'; } ?>">
+						<a href="{:U('Index/toStudent', array('pageName' => 'student'))}">Students 学员</a>
+					</li>
+					<li class="news <?php if($pageName == 'news'){ echo 'active'; } ?>">
+						<a href="{:U('Index/toNews', array('pageName' => 'news', 'model' => 'faq'))}">News 新闻</a>
+					</li>
+					<li class="about <?php if($pageName == 'about'){ echo 'active'; } ?>">
+						<a href="{:U('Index/toAbout', array('pageName' => 'about'))}">About 美高简介</a>
+					</li>
+					<li class="partner <?php if($pageName == 'partner'){ echo 'active'; } ?>">
+						<a href="{:U('Index/toPartner', array('pageName' => 'partner'))}">Partner 合作伙伴</a>
+					</li>
+				</ul>
+			</div>
+			<div class="clear"></div>
+		</div>
+	</div>
+</div>
+<include file="Common:frontendLogin"/>
+<script>
+(function ($) {
+	// loading
+	window.onload = function() {
+		$('.loading').fadeOut(1500);
+	}
+
+	$(function() {
+		header();
+
+		// iPad、移动，touch
+		$('.header .middle-container ul li a').on('touchend', function() {
+			// alert('1');
+			var link = $(this).attr('href');
+			window.location.href = link;
+		});
+
+		$('.btn-download').on('click', function() {
+			var isLogin = '<?php echo session('mgLoginStatus'); ?>';
+			if (!isLogin) {
+				$('.login-ctn').addClass('active');
+				$('.login').addClass('active');
+
+				return false;
+			}
+		});
+
+		function header() {
+			var height = $('.header').height();
+			$('body').css({'padding-top': height});
+		}
+
+		// 手机端 菜单显示
+		$('.header .phone-port-nav p i').on('click', function() {
+			var hasClass = $('.phone-port-menu-ctn').hasClass('active');
+			if (hasClass) {
+				$('.phone-port-menu-ctn').removeClass('active');
+				$(this).attr('class', 'icon-reorder');
+			}else {
+				$('.phone-port-menu-ctn').addClass('active');
+				$(this).attr('class', 'icon-remove');
+			}
+		});
+
+		// 手机端 二级菜单
+		$('.header .nav .ul-ctn >ul >li .arrow').on('click', function() {
+			var hasClass = $('.header .nav .second-menu ul').hasClass('active');
+			if (hasClass) {
+				$('.header .nav .second-menu ul').removeClass('active');
+				$(this).css({'transform': 'rotate(0deg)'});
+			}else {
+				$('.header .nav .second-menu ul').addClass('active');
+				$(this).css({'transform': 'rotate(-180deg)'});
+			}
+
+			return false;
+		});
+	});
+})(jQuery);
+</script>

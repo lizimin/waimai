@@ -1,0 +1,117 @@
+<style>
+	.wrapper.admin .middle-content .sidebar ul li .second-level-menu { height: 0; transition: all 0.5s ease-in-out; opacity: 0; overflow: hidden; }
+	.wrapper.admin .middle-content .sidebar ul li .second-level-menu.active { opacity: 1; }
+	.wrapper.admin .middle-content .sidebar ul li .second-level-menu .arrow { margin-right: 30px; }
+	.wrapper.admin .middle-content .sidebar ul li .second-level-menu a  { /*background: #2c373c;*/ background: #2c373c; padding: 8px 20%; transition: all 0.3s ease-in-out; font-weight: lighter; color: #fff; }
+	.wrapper.admin .middle-content .sidebar ul li .second-level-menu a:hover { padding: 8px 20%; color: #fed926; }
+	.wrapper.admin .middle-content .sidebar ul li.active .first-level .arrow i,
+	.wrapper.admin .middle-content .sidebar ul li:hover .first-level .arrow i { color: #0173bc !important; }
+	.wrapper.admin .middle-content .sidebar ul li.active .badge.bg-yellow,
+	.wrapper.admin .middle-content .sidebar ul li:hover .badge.bg-yellow { background: #37b4ca; color: #fff; margin-top: -5px; }
+</style>
+<div class="sidebar pull-left">
+	<ul>		
+		<li class="<?php if($pageName == 'dashboard' || empty($pageName)){ echo 'active'; } ?>">
+			<div class="relative first-level">
+				<p>
+					<a href="{:U('Admin/index', array('pageName' => 'dashboard'))}">
+						<i class="icon-dashboard"></i> 面板
+					</a>
+				</p>
+				<div class="arrow-right-ctn"><div class="cus-table"><div class="cus-table-cell"><div class="arrow"><i class="icon-angle-right white"></i></div></div></div></div>
+			</div>
+		</li>
+
+		<?php 
+
+		 ?>
+
+		 <li class="<?php if($pageName == 'store'){ echo 'active'; } ?>">
+			<div class="relative first-level">
+				<p><a href="{:U('Store/toStore', array('pageName' => 'store'))}"><i class="icon-desktop"></i> 店铺管理</a></p>
+				<div class="arrow-right-ctn"><div class="cus-table"><div class="cus-table-cell"><div class="arrow"><i class="icon-angle-right white"></i></div></div></div></div>
+			</div>
+		</li>
+>
+		
+		<!-- <li class="<?php if($pageName == 'message'){ echo 'active'; } ?>">
+			<div class="relative first-level">
+				<p><a href="{:U('Admin/toMessage', array('pageName' => 'message'))}"><i class="icon-envelope"></i> 用户留言 <?php if($result != 0): ?><span class="badge message-new-all bg-yellow"><?php echo $result; ?></span><?php endif; ?></a></p>
+				<div class="arrow-right-ctn"><div class="cus-table"><div class="cus-table-cell"><div class="arrow"><i class="icon-angle-right white"></i></div></div></div></div>
+			</div>
+		</li> -->
+		<!-- <li class="<?php if($pageName == 'information'){ echo 'active'; } ?>">
+			<div class="relative first-level">
+				<p><a href="{:U('Admin/toInformation', array('pageName' => 'information'))}"><i class="icon-list-alt"></i> 资讯管理</a></p>
+				<div class="arrow-right-ctn"><div class="cus-table"><div class="cus-table-cell"><div class="arrow"><i class="icon-angle-right white"></i></div></div></div></div>
+			</div>
+		</li>
+
+		<li class="<?php if($pageName == 'download'){ echo 'active'; } ?>">
+			<div class="relative first-level">
+				<p><a href="{:U('Admin/toDownload', array('pageName' => 'download'))}"><i class="icon-download-alt"></i> 资料下载</a></p>
+				<div class="arrow-right-ctn"><div class="cus-table"><div class="cus-table-cell"><div class="arrow"><i class="icon-angle-right white"></i></div></div></div></div>
+			</div>
+		</li>
+
+		<li class="<?php if($pageName == 'frontend'){ echo 'active'; } ?>">
+			<div class="relative first-level">
+				<p><a class="first-level-menu" href="{:U('Admin/toFrontend', array('pageName' => 'frontend'))}"><i class="icon-desktop"></i> 前台管理</a></p>
+				<div class="arrow-right-ctn"><div class="cus-table"><div class="cus-table-cell"><div class="arrow"><i class="icon-angle-right white"></i></div></div></div></div>
+			</div>
+			<div class="second-level-menu frontend">
+				<div class="relative">
+					<p><a href="{:U('Admin/toFrontend', array('pageName' => 'frontend', 'isChild' => 'true', 'childName' => 'homepage'))}">首页</a></p>
+				</div>
+				<div class="relative">
+					<p><a href="{:U('Admin/toFrontend', array('pageName' => 'frontend', 'isChild' => 'true', 'childName' => 'curriculum'))}">课程</a></p>
+				</div>
+				<div class="relative">
+					<p><a href="{:U('Admin/toFrontend', array('pageName' => 'frontend', 'isChild' => 'true', 'childName' => 'about'))}">关于美高</a></p>
+				</div>
+				<div class="relative">
+					<p><a href="{:U('Admin/toFrontend', array('pageName' => 'frontend', 'isChild' => 'true', 'childName' => 'partner'))}">合作伙伴</a></p>
+				</div>
+				<div class="relative">
+					<p><a href="{:U('Admin/toFrontend', array('pageName' => 'frontend', 'isChild' => 'true', 'childName' => 'center'))}">个人中心</a></p>
+				</div>
+			</div>
+		</li> -->
+
+		<?php if(session('level') == 10): ?>
+			<li class="<?php if($pageName == 'accountManage'){ echo 'active'; } ?>">
+				<div class="relative first-level">
+					<p><a href="{:U('Admin/toAccountManage', array('pageName' => 'accountManage'))}"><i class="icon-group"></i> 账号管理</a></p>
+					<div class="arrow-right-ctn"><div class="cus-table"><div class="cus-table-cell"><div class="arrow"><i class="icon-angle-right white"></i></div></div></div></div>
+				</div>
+			</li>
+		<?php endif; ?>
+	</ul>
+</div>
+
+
+<script>
+(function ($) {
+	$(function() {
+		$('.first-level-menu').on('click', function() {
+			var isAcitve = $(this).hasClass('active');
+			if (isAcitve) {
+				$(this).removeClass('active');
+				$(this).closest('li').find('.second-level-menu').css({'height': '0'});
+				$(this).closest('li').find('.second-level-menu').removeClass('active');
+				$(this).parent().next().find('.arrow').removeClass('active');
+			}else {
+				var secondCount = $(this).closest('li').find('.second-level-menu').children().length;
+				var secondheight = $(this).closest('li').find('.second-level-menu div').height();
+				var curHeight = secondCount * secondheight;
+				$(this).addClass('active');
+				$(this).closest('li').find('.second-level-menu').css({'height': curHeight});
+				$(this).closest('li').find('.second-level-menu').addClass('active');
+				$(this).parent().next().find('.arrow').addClass('active');
+			}
+
+			return false;
+		});
+	});
+})(jQuery);
+</script>

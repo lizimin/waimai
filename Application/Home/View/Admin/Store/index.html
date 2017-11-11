@@ -1,0 +1,175 @@
+<html>
+	<head>
+		<title>点度后台管理</title>
+		<include file="brandCommon:head"/>
+		<style>
+			table tbody tr { transition: all 0.3s ease-in-out; }
+			table tbody tr td span { display: inline-block; padding: 0 3px; }
+			.no-view { background: #2e3252 !important; color: #fff !important; border-top: 1px solid #fff; }
+			.no-view span i { color: #fff; }
+			.detail-control { margin-top: 5px; }
+			.detail-control .detail-add { width: 50%; margin-right: 10px; }
+			.member-entry { margin-top: 5px; display: inline-block; width: 100%; }
+			.member-entry input { width: 27%; margin-right: 3.33%; }
+			.jagoFancybox .box { width: 45%; }
+			.jagoFancybox .box .box-left { width: 49%; float: left; }
+			.jagoFancybox .box .box-right { width: 49%; float: right; }
+		</style>
+	</head>
+	<body>
+		<div class="wrapper admin">
+			<include file="brandCommon:alert"/>
+			<include file="brandCommon:adminHeader"/>
+			<div class="middle-content">
+				<include file="brandCommon:adminSidebar"/>
+				<div class="content pull-right">
+					<div class="account-manage">
+						<h1 class="headline text-center bold">店铺管理</h1>
+
+						<div class="tools">
+							<ul>
+									<li>
+										<p><a class="btn btn-tools btn-add-brand" href="#"><i class="icon-plus-sign-alt"></i> 添加店铺</a></p>
+									</li>
+							</ul>
+						</div>
+
+						<table class="table table-striped table-hover">
+							<thead>
+								<tr>
+									<td width="15%">店铺名字</td>
+									<td width="15%">地址</td>
+									<td width="15%">联系方式</td>
+									<td width="20%">店铺描述</td>
+									<td width="20%">店铺图片</td>
+									<td width="25%">操作</td>
+								</tr>
+							</thead>
+							<tbody>
+								<?php foreach($data as $k=>$v){?>
+								 <tr>
+								 	<td><?php echo $v['store_name']; ?></td>
+								 	<td><?php echo $v['address']; ?></td>
+									<td><?php echo $v['contact']; ?></td>
+									<td><?php echo $v['describe']; ?></td>
+									<td><img style="width: 100px;" class="photo-ctn mg-top" src="<?php echo $v['img']; ?>" alt=""></td>
+								 	<td>
+								 			<!-- <span><a href="{:U('Admin/accountDelete', array('id' => $val['id']))}"><i class="icon-trash"></i></a></span> -->
+								 			<span><a href="javascript:;" title="删除" data-id="<?php echo $v['id']; ?>" data-tag="<?php echo $v['store_name'] ?>" class="jagoFancybox-delete"><i class="icon-trash"></i></a></span>
+								 			<span><a href="javascript:;" title="删除" data-id="<?php echo $v['id']; ?>" data-tag="<?php echo $v['store_name'] ?>" class="jagoFancybox-delete"><i class="icon-edit"></i></a></span>
+								 			<span><a href="<?php echo U('Store/storeManager',array('id'=>$v['id']))?>" title="管理店铺" data-id="<?php echo $v['id']; ?>" data-tag="<?php echo $v['store_name'] ?>" class="jagoFancybox-manager"><i class="icon-desktop"></i></a></span>								 
+								 	</td >
+								 </tr>
+								<?php }?>
+							</tbody>
+						</table>
+
+						
+			<div class="jagoFancybox">
+			<div class="cus-table">
+				<div class="cus-table-cell">
+					<div class="box box-1">
+						<div class="jagoFancybox-confirm-ctn">
+							<div class="jagoFancybox-head">
+								<h4 class="title">店铺删除 <a href="#"><i class="icon-remove-sign pull-right jagoFancybox-cancel"></i></a></h4>
+							</div>
+							<form action="{:U('Store/storeDelete')}">
+								<div class="jagoFancybox-body">
+									<p class="jagoFancybox-headline">是否删除?</p>
+									<p class="jagoFancybox-content bold"></p>
+									<div class="none">
+										<input type="text" name="id">
+									</div>
+								</div>
+								<div class="jagoFancybox-btn">
+									<button type="submit" class="btn btn-primary pull-left" href="#">确认</button>
+									<a class="btn btn-default pull-right jagoFancybox-cancel" href="#">取消</a>
+								</div>
+							</form>
+						</div>
+					</div>
+
+					<div class="box box-2">
+						<div class="add-hotel panel panel-default">
+							<div class="panel-heading">
+								<h4 class="title">店铺添加 <a href="#"><i class="icon-remove-sign pull-right jagoFancybox-cancel"></i></a></h4>
+							</div>
+								<div class="panel-body">
+												<form class="adminLogin" role="form" enctype="multipart/form-data" action="{:U('Store/storeAdd')}" method="POST">
+												  <div class="form-group">
+												    <label for="store_name">店铺名字</label>
+												    <input name="store_name" type="text" class="form-control" id="store_name" placeholder="name" autocomplete="off" required="">
+												  </div>
+
+												  <div class="form-group">
+												    <label for="address">地址</label>
+												    <input name="address" type="text" class="form-control" id="address" placeholder="address" autocomplete="off" required="">
+												  </div>
+
+												  <div class="form-group">
+												    <label for="contact">联系方式</label>
+												    <input name="contact" type="text" class="form-control" id="contact" placeholder="contact" autocomplete="off" required="">
+												  </div>
+															  
+													<div class="form-group">
+													    <label class="" for="img">图片</label>
+													    <input name="img" type="file" class="form-control" id="img" placeholder="图片" autocomplete="off" required="">
+													 </div>
+													 
+												<div class="form-group">
+												    <label for="describe">描述</label>
+												    <textarea name="describe"  class="form-control" id="describe" placeholder="describe" autocomplete="off" required=""></textarea>
+												  </div>
+
+								
+											<div class="text-center">
+											<button type="submit" class="btn btn-primary btn-submit"><i class="icon-plus-sign-alt"></i> 添加店铺</button>
+											<p class="error-msg red pull-right"></p>
+										</div>
+									</form>
+								</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		
+
+			</div>
+
+					<style>
+						table.table thead tr td { font-weight: bold; }
+						.jagoFancybox .box { width: 20%; left: 40%; }
+					</style>
+
+					<script>
+					(function ($) {
+						$(function() {
+							// tools add account
+							$('.btn-add-account').on('click', function() {
+								$('.jagoFancybox').addClass('active');
+								$('.jagoFancybox .box-1').addClass('active');
+							});
+
+							$('.btn-add-brand').on('click', function() {
+								$('.jagoFancybox').addClass('active');
+								$('.jagoFancybox .box-2').addClass('active');
+								return false;
+							});
+							
+							$('table').on("click",'.jagoFancybox-delete',function(){
+								var id=$(this).data('id');
+								var tag=$(this).data('tag');
+								$('.jagoFancybox .box-1').find('input').val(id);
+								$('.jagoFancybox .box-1').find('p').eq(0).text(tag)
+								$('.jagoFancybox').addClass('active');
+								$(".box-1").addClass('active');
+							})
+						});
+					})(jQuery);
+					</script>
+				</div>
+				<div class="clear"></div>
+			</div>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,19 @@
+<div class="header">
+	<div class="left pull-left">
+		<img class="logo" src="__ROOT__/Public/images/other/logo.png" alt="">
+	</div>
+	<div class="right pull-right">
+		<ul>
+			<li>
+				<p><i class="icon-user"></i> <?php echo session('account'); ?></p>
+			</li>
+			<li>
+				<p><?php echo session('name'); ?></p>
+			</li>
+			<li>
+				<p><a href="{:U('Login/logout')}"><i class="icon-signout"></i> 注销</a></p>
+			</li>
+		</ul>
+	</div>
+	<div class="clear"></div>
+</div>

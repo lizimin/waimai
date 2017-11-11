@@ -1,0 +1,53 @@
+<div class="left">
+	<div class="user text-center">
+		<div class="img-area">
+			<?php 
+				$userId = session('mgUserId');
+				$Dao = A('Admin');
+				$User = $Dao -> selectOne('User', $userId);
+				$User = $User[0];
+				$mgImage = $User['image'];
+				if (!$mgImage):
+			 ?>
+				<img src="__ROOT__/Public/images/other/user-default.png" alt="">
+			<?php else: ?>
+				<img src="__ROOT__<?php echo $mgImage; ?>" alt="">
+			<?php endif; ?>
+		</div>
+		<h3 class="title"><?php echo $User['name']; ?></h3>
+		<p><?php echo $User['phone']; ?></p>
+	</div>
+	<div class="center-nav">
+		<ul>
+			<li>
+				<div class="nav-entry <?php if($_GET['childName']=='index' || $_GET['childName']=='index_1'){echo 'active';} ?>">
+					<a href="{:U('Index/toCenter', array('pageName' => 'center', 'isChild' => 'true', 'childName' => 'index_1'))}"><p><i class="icon-star-empty"></i> 我的收藏</p></a>
+					<div class="arrow-right-ctn"><div class="cus-table"><div class="cus-table-cell"><div class="arrow"><i class="icon-angle-right"></i></div></div></div></div>
+				</div>
+			</li>
+			<li>
+				<div class="nav-entry <?php if($_GET['childName']=='level_test'){echo 'active';} ?>">
+					<a href="{:U('Index/toCenter', array('pageName' => 'center', 'isChild' => 'true', 'childName' => 'level_test'))}"><p><i class="icon-file-alt"></i> 等级测试</p></a>
+					<div class="arrow-right-ctn"><div class="cus-table"><div class="cus-table-cell"><div class="arrow"><i class="icon-angle-right"></i></div></div></div></div>
+				</div>
+			</li>
+			<li>
+				<div class="nav-entry <?php if($_GET['childName']=='personal_info'){echo 'active';} ?>">
+					<a href="{:U('Index/toCenter', array('pageName' => 'center', 'isChild' => 'true', 'childName' => 'personal_info'))}"><p><i class="icon-user-md"></i> 个人资料</p></a>
+					<div class="arrow-right-ctn"><div class="cus-table"><div class="cus-table-cell"><div class="arrow"><i class="icon-angle-right"></i></div></div></div></div>
+				</div>
+			</li>
+			<li>
+				<div class="nav-entry <?php if($_GET['childName']=='class_card'){echo 'active';} ?>">
+					<a href="{:U('Index/toCenter', array('pageName' => 'center', 'isChild' => 'true', 'childName' => 'class_card'))}"><p><i class="icon-credit-card"></i> 课程卡</p></a>
+					<div class="arrow-right-ctn"><div class="cus-table"><div class="cus-table-cell"><div class="arrow"><i class="icon-angle-right"></i></div></div></div></div>
+				</div>
+			</li>
+		</ul>
+	</div>
+	<div class="btn-ctn">
+		<form class="logout" style="width: 100%;" action="{:U('Index/logout')}">
+			<button class="btn" type="submit"><i class="icon-signout"></i> 退出账号</button>
+		</form>
+	</div>
+</div>

@@ -1,0 +1,9 @@
+<?php if($_GET['status'] == 'success'): ?>
+	<script>cusAlert('success', '<?php echo $_GET['info']; ?>');</script>
+<?php elseif($status == 'fail'): ?>
+	<script>cusAlert('warning', '<?php echo $info; ?>');</script>
+<?php elseif($status == 'success'): ?>
+	<script>cusAlert('success', '<?php echo $info; ?>');</script>
+<?php elseif($_GET['status'] == 'fail'): ?>
+	<script>cusAlert('warning', '<?php echo $_GET['info']; ?>');</script>
+<?php endif; ?>
