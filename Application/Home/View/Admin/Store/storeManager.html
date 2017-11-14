@@ -54,7 +54,7 @@
 								 	<td>
 								 			<!-- <span><a href="{:U('Admin/accountDelete', array('id' => $val['id']))}"><i class="icon-trash"></i></a></span> -->
 								 			<span><a href="javascript:;" title="删除" data-id="<?php echo $v['id']; ?>" data-tag="<?php echo $v['store_name'] ?>" class="jagoFancybox-delete"><i class="icon-trash"></i></a></span>
-								 			<span><a href="javascript:;" title="删除" data-id="<?php echo $v['id']; ?>" data-tag="<?php echo $v['store_name'] ?>" class="jagoFancybox-delete"><i class="icon-edit"></i></a></span>
+								 			<span><a href="javascript:;" title="编辑" data-id="<?php echo $v['id']; ?>" data-tag="<?php echo $v['store_name'] ?>" class="jagoFancybox-edit"><i class="icon-edit"></i></a></span>
 								 			<span><a href="<?php echo U('store/dishManager',array('category_id'=>$v['id']))?>" title="添加菜系" data-id="<?php echo $v['id']; ?>" data-tag="<?php echo $v['store_name'] ?>"><i class="icon-desktop"></i></a></span>								 
 								 	</td >
 								 </tr>
@@ -124,6 +124,46 @@
 								</div>
 						</div>
 					</div>
+					
+				<!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->	
+					<div class="box box-3">
+						<div class="add-hotel panel panel-default">
+							<div class="panel-heading">
+								<h4 class="title">编辑分类 <a href="#"><i class="icon-remove-sign pull-right jagoFancybox-cancel"></i></a></h4>
+							</div>
+								<div class="panel-body">
+												<form class="adminLogin" role="form" enctype="multipart/form-data" action="{:U('Store/categoryAdd')}" method="POST">
+												  <div class="form-group">
+												    <label for="category_name">菜系</label>
+												    <input name="category_name" type="text" class="form-control" id="category_name" placeholder="菜系" autocomplete="off" required="">
+												    <input name="store_id" value="<?php echo $data[id]?>" type="hidden" class="form-control" id="store_id" placeholder="菜系" autocomplete="off" required="">
+												  </div>
+
+													<div class="form-group">
+													    <label class="" for="img">图片</label>
+													    <input name="img" type="file" class="form-control" id="img" placeholder="图片" autocomplete="off" required="">
+													 </div>
+
+												  <div class="form-group">
+												    <label for="is_sale"> <input name="is_sale" checked="checked" type="radio" value="0" />上架</label>&nbsp;&nbsp;
+												    <label for="is_sale"> <input name="is_sale"  type="radio" value="1" />下架</label>
+												  </div>
+															  
+												<div class="form-group">
+												    <label for="describe">描述</label>
+												    <textarea name="describe"  class="form-control" id="describe" placeholder="describe" autocomplete="off" required=""></textarea>
+												  </div>
+
+								
+											<div class="text-center">
+											<button type="submit" class="btn btn-primary btn-submit"><i class="icon-plus-sign-alt"></i> 编辑店铺</button>
+											<p class="error-msg red pull-right"></p>
+										</div>
+									</form>
+								</div>
+						</div>
+					</div>
+					<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
 				</div>
 			</div>
 		
@@ -143,6 +183,11 @@
 								$('.jagoFancybox').addClass('active');
 								$('.jagoFancybox .box-1').addClass('active');
 							});
+							
+							$('table').on('click','.jagoFancybox-edit',function(){
+								$('.jagoFancybox').addClass('active');
+								$('.jagoFancybox .box-3').addClass('active');
+							})
 
 							$('.btn-add-brand').on('click', function() {
 								$('.jagoFancybox').addClass('active');

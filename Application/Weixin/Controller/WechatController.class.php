@@ -208,13 +208,28 @@ class WechatController extends Controller {
 	public function getOrder(){
 		if(IS_GET){
 			$weixin_user_id=$_GET['weixin_user_id'];
-			if($_GET['weixin_user_id']){
-				$data=M('order')->where(['weixin_user_id='.$weixin_user_id])->select()[0];
-				$myOrder['date']=$data['date'];
-				$myOrder['dishData']=json_decode($data['dishdata']);
-				$myOrder['status']=$data['status'];
-				$myOrder['id']=$data['id'];
+			if(isset($_GET['weixin_user_id'])&&isset($_GET['status'])){
+				$model=M('order');
+				$where['weixin_user_id']=$weixin_user_id;
+				if($_GET['status']==0){
+					$where['status']=0;
+				}
+				if($_GET['status']==1){
+					$where['status']=1;
+				}
+				if($_GET['status']==2){
+					$where['status']=2;
+				}
+				$myOrder=array();
+				$data=M('order')->where($where)->select();
+				foreach($data as $k=>$v){
+					$myOrder[$k]['date']=$v['date'];
+					$myOrder[$k]['status']=$v['status'];
+					$myOrder[$k]['dishData']=json_decode($v['dishdata']);
+					$myOrder[$k]['id']=$v['id'];
+				}
 				$this->ajaxReturn(['code'=>0,'info'=>'Data return success','data'=>$myOrder]);
+				
 			}else{
 				$this->ajaxReturn(['code'=>1,'info'=>'params error','data'=>[]]);
 			}

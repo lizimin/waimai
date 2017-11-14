@@ -76,7 +76,7 @@ class StoreController extends AdminController {
 				if (isset ( $info ['img'] )) {
 					$_POST ['img'] = '/Upload/' . $info ['img'] ['savepath'] . $info ['img'] ['savename'];
 					$model = M ( 'store' );
-					if ($model->where('id='.$_POST['store_id'])->save(( $model->create ( $_POST ) ))) {
+					if ($model->where ( 'id=' . $_POST ['store_id'] )->save ( ($model->create ( $_POST )) )) {
 						$params = array (
 								'status' => 'success',
 								'info' => '店铺修改成功!',
@@ -212,5 +212,10 @@ class StoreController extends AdminController {
 				}
 			}
 		}
+	}
+	
+	
+	public function dishEdit(){
+		
 	}
 }
