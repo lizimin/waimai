@@ -56,7 +56,7 @@
 								 	<td>
 								 			<!-- <span><a href="{:U('Admin/accountDelete', array('id' => $val['id']))}"><i class="icon-trash"></i></a></span> -->
 								 			<span><a href="javascript:;" title="删除" data-id="<?php echo $v['id']; ?>" data-tag="<?php echo $v['store_name'] ?>" class="jagoFancybox-delete"><i class="icon-trash"></i></a></span>
-								 			<span><a href="javascript:;" title="删除" data-id="<?php echo $v['id']; ?>" data-tag="<?php echo $v['store_name'] ?>" class="jagoFancybox-delete"><i class="icon-edit"></i></a></span>
+								 			<span><a href="javascript:;" title="删除" data-id="<?php echo $v['id']; ?>" data-tag="<?php echo $v['store_name'] ?>" class="jagoFancybox-edit"><i class="icon-edit"></i></a></span>
 								 			<span><a href="<?php echo U('Store/storeManager',array('id'=>$v['id']))?>" title="管理店铺" data-id="<?php echo $v['id']; ?>" data-tag="<?php echo $v['store_name'] ?>" class="jagoFancybox-manager"><i class="icon-desktop"></i></a></span>								 
 								 	</td >
 								 </tr>
@@ -131,6 +131,52 @@
 						</div>
 					</div>
 				</div>
+				
+				<!--  ++++++++++++++++++++++++++++++++++++++++++++++++++++++-->
+					<div class="box box-edit">
+						<div class="add-hotel panel panel-default">
+							<div class="panel-heading">
+								<h4 class="title">店铺编辑 <a href="#"><i class="icon-remove-sign pull-right jagoFancybox-cancel"></i></a></h4>
+							</div>
+								<div class="panel-body">
+												<form class="adminLogin" role="form" enctype="multipart/form-data" action="{:U('Store/storeEdit')}" method="POST">
+												  <div class="form-group">
+												    <label for="store_name">店铺名字</label>
+												    <input name="store_name" type="text" class="form-control" id="store_name" placeholder="name" autocomplete="off" required="">
+												    <input name="store_id" type="hidden" class="form-control" id="store_id" placeholder="name" autocomplete="off" required="">
+												  </div>
+
+												  <div class="form-group">
+												    <label for="address">地址</label>
+												    <input name="address" type="text" class="form-control" id="address" placeholder="address" autocomplete="off" required="">
+												  </div>
+
+												  <div class="form-group">
+												    <label for="contact">联系方式</label>
+												    <input name="contact" type="text" class="form-control" id="contact" placeholder="contact" autocomplete="off" required="">
+												  </div>
+															  
+													<div class="form-group">
+													    <label class="" for="img">图片</label>
+													    <input name="img" type="file" class="form-control" id="img" placeholder="图片" autocomplete="off" required="">
+													 </div>
+													 
+												<div class="form-group">
+												    <label for="describe">描述</label>
+												    <textarea name="describe"  class="form-control" id="describe" placeholder="describe" autocomplete="off" required=""></textarea>
+												  </div>
+
+								
+											<div class="text-center">
+											<button type="submit" class="btn btn-primary btn-submit"><i class="icon-plus-sign-alt"></i> 编辑店铺</button>
+											<p class="error-msg red pull-right"></p>
+										</div>
+									</form>
+								</div>
+						</div>
+					</div>
+				</div>
+				<!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
 			</div>
 		
 
@@ -144,11 +190,30 @@
 					<script>
 					(function ($) {
 						$(function() {
-							// tools add account
 							$('.btn-add-account').on('click', function() {
 								$('.jagoFancybox').addClass('active');
 								$('.jagoFancybox .box-1').addClass('active');
 							});
+							
+							$('table').on("click",'.jagoFancybox-edit',function(){
+								var mythis=$(this);
+								var id=$(this).data('id');
+								$.ajax({
+									'url':'/Home/Store/storeEdit',
+									'type':'GET',
+									'data':{"id":id},
+									'dataType':'json',
+									'success':function(res){
+										$('.box-edit').find('input').eq(0).val(res.data.store_name)
+									    $('.box-edit').find('input').eq(1).val(id)
+										$('.box-edit').find('input').eq(2).val(res.data.address)
+										$('.box-edit').find('input').eq(3).val(res.data.contact)
+										$('.box-edit').find('textarea').eq(0).val(res.data.describe)
+									}
+								})
+								$('.jagoFancybox').addClass('active');
+								$('.jagoFancybox .box-edit').addClass('active');
+							})
 
 							$('.btn-add-brand').on('click', function() {
 								$('.jagoFancybox').addClass('active');

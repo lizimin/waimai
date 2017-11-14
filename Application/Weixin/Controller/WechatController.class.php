@@ -205,6 +205,22 @@ class WechatController extends Controller {
 			}
 		}
 	}
+	public function getOrder(){
+		if(IS_GET){
+			$weixin_user_id=$_GET['weixin_user_id'];
+			if($_GET['weixin_user_id']){
+				$data=M('order')->where(['weixin_user_id='.$weixin_user_id])->select()[0];
+				$myOrder['date']=$data['date'];
+				$myOrder['dishData']=json_decode($data['dishdata']);
+				$myOrder['status']=$data['status'];
+				$myOrder['id']=$data['id'];
+				$this->ajaxReturn(['code'=>0,'info'=>'Data return success','data'=>$myOrder]);
+			}else{
+				$this->ajaxReturn(['code'=>1,'info'=>'params error','data'=>[]]);
+			}
+			
+		}
+	}
 	public function createOrder() {
 		header ( 'Content-Type:application/json; charset=utf-8' );
 		if (IS_POST) {
@@ -218,9 +234,7 @@ class WechatController extends Controller {
 				$_POST ['trade_no'] = $trade_no;
 				$_POST ['orderid'] = $orderID;
 				$_POST ['date'] = date ( 'Y-m-d:h:m:s', time () );
-				if ($order->add ( $order->create ( $_POST ) )) {
-					$data ['time'] = date ( 'Y-m-d:h:m:s', time () );
-					$data ['dishData'] = $_POST ['dishData'];
+				if ($order_id = $order->add ( $order->create ( $_POST ) )) {
 					echo json_encode ( [ 
 							'code' => 0,
 							'info' => 'successful add',
