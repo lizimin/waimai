@@ -206,9 +206,10 @@ class WechatController extends Controller {
 		}
 	}
 	public function createOrder() {
+		header ( 'Content-Type:application/json; charset=utf-8' );
 		if (IS_POST) {
-			var_dump ( $_POST );
-			exit ();
+			// var_dump ( $_POST );
+			// exit ();
 			$model = new WechatModel ();
 			$orderID = "B" . mt_rand ( 10000, 99999 ) . time ();
 			$trade_no = date ( 'Ymdhis' ) . mt_rand ( 11, 99 ) . mt_rand ( 1, 9 );
@@ -216,24 +217,26 @@ class WechatController extends Controller {
 			if (isset ( $_POST ['address_id'] ) && isset ( $_POST ['weixin_user_id'] ) && isset ( $_POST ['total'] ) && isset ( $_POST ['dishData'] )) {
 				$_POST ['trade_no'] = $trade_no;
 				$_POST ['orderid'] = $orderID;
-				$_POST['date']=date('Y-m-d:h:m:s',time());
+				$_POST ['date'] = date ( 'Y-m-d:h:m:s', time () );
 				if ($order->add ( $order->create ( $_POST ) )) {
-					return $this->ajaxReturn ( [
+					$data ['time'] = date ( 'Y-m-d:h:m:s', time () );
+					$data ['dishData'] = $_POST ['dishData'];
+					echo json_encode ( [ 
 							'code' => 0,
-							'info' => 'add successful',
-							'data' => [ ]
-							] );
-				}else{
-					return $this->ajaxReturn ( [
+							'info' => 'successful add',
+							'data' => json_decode ( $_POST ['dishData'] ) 
+					], JSON_UNESCAPED_UNICODE );
+				} else {
+					return $this->ajaxReturn ( [ 
 							'code' => 1,
 							'info' => 'params error',
-							'data' => [ ]
-							] );
+							'data' => [ ] 
+					] );
 				}
 			}
-			//$model->setBody ( 'this is a black cat' );
-			//$model->setTrade_no ( $trade_no );
-			//$model->setTotal ( $_POST ['total'] );
+			// $model->setBody ( 'this is a black cat' );
+			// $model->setTrade_no ( $trade_no );
+			// $model->setTotal ( $_POST ['total'] );
 		}
 	}
 }
