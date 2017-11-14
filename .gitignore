@@ -1,4 +1,4 @@
-/Application/Runtime/
+Application/Runtime/
 Config/dbs.php
 *.swp
 *.project
