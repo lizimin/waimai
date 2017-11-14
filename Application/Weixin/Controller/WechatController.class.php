@@ -10,7 +10,7 @@ class WechatController extends Controller {
 	private $url = '';
 	private $appid = 'wx203e1116b8467c61';
 	private $secret = 'c6e637dd771534cac44cce81f6c709cd';
-	public function payCallback(){
+	public function payCallback() {
 		echo "ccvv1234";
 	}
 	public function getOpenid() {
@@ -37,7 +37,7 @@ class WechatController extends Controller {
 						return $this->ajaxReturn ( [ 
 								'code' => 0,
 								'info' => 'openid has arealdy',
-								'weixin_user_id' => $this->checkOpenid ( $openid )
+								'weixin_user_id' => $this->checkOpenid ( $openid ) 
 						] );
 					}
 				}
@@ -80,9 +80,9 @@ class WechatController extends Controller {
 	}
 	private function checkOpenid($openid) {
 		$model = M ( 'weixin_user' );
-		$data=$model->where ( 'openid="' . $openid . '"' )->select ();
+		$data = $model->where ( 'openid="' . $openid . '"' )->select ();
 		if ($data) {
-			return $data[0]['id'];
+			return $data [0] ['id'];
 		} else {
 			return false;
 		}
@@ -102,8 +102,8 @@ class WechatController extends Controller {
 			foreach ( $category as $k => $v ) {
 				foreach ( $dish as $i => $j ) {
 					if ($v ['id'] == $j ['category_id']) {
-						$j['flag']=0;
-						$j['total']=0;
+						$j ['flag'] = 0;
+						$j ['total'] = 0;
 						$category [$k] ['child'] [] = $j;
 					}
 				}
@@ -113,7 +113,7 @@ class WechatController extends Controller {
 	}
 	public function addressAdd() {
 		if (IS_POST) {
-			if ( isset ( $_POST ['weixin_user_id'] ) && isset ( $_POST ['address'] ) && isset ( $_POST ['street'] ) && isset ( $_POST ['phone'] )) {
+			if (isset ( $_POST ['weixin_user_id'] ) && isset ( $_POST ['address'] ) && isset ( $_POST ['street'] ) && isset ( $_POST ['phone'] )) {
 				$address = M ( 'address' );
 				if ($address->add ( $address->create ( $_POST ) )) {
 					return $this->ajaxReturn ( [ 
@@ -183,40 +183,57 @@ class WechatController extends Controller {
 			}
 		}
 	}
-	
-	public function addressEdit(){
-		if(IS_POST){
-			if($_POST['id']){
-				$model=M('address');
-				if($model->where("id=".$_POST['id'])->save($_POST)){
-					return $this->ajaxReturn(['code'=>0,'info'=>'update success','data'=>[]]);
-				}else{
-					echo $model->getDbError();
+	public function addressEdit() {
+		if (IS_POST) {
+			if ($_POST ['id']) {
+				$model = M ( 'address' );
+				if ($model->where ( "id=" . $_POST ['id'] )->save ( $_POST )) {
+					return $this->ajaxReturn ( [ 
+							'code' => 0,
+							'info' => 'update success',
+							'data' => [ ] 
+					] );
+				} else {
+					echo $model->getDbError ();
 				}
-			}else{
-				 return $this->ajaxReturn(['code'=>1,'info'=>'缺少参数','data'=>[]]);
+			} else {
+				return $this->ajaxReturn ( [ 
+						'code' => 1,
+						'info' => '缺少参数',
+						'data' => [ ] 
+				] );
 			}
 		}
 	}
-	
-	public function createOrder(){
-		if(IS_POST){
-			$model=new WechatModel();
-			$orderID="B".mt_rand(10000,99999).time();
-			$trade_no=date('Ymdhis') . mt_rand(11, 99) . mt_rand(1, 9);
-			$order=M('order');
-			/*if(isset($_POST['total'])){
-				$model->setBody('this is a black cat');
-				$model->setTrade_no($trade_no);
-				$model->setTotal($_POST['total']);
-			}*/
-			$_POST['trade_no']=$trade_no;
-			$_POST['orderid']=$orderID;
-			if($order->add($order->create($_POST))){
-				return $this->ajaxReturn(['code'=>0,'info'=>'add successful','data'=>[]]);
+	public function createOrder() {
+		if (IS_POST) {
+			var_dump ( $_POST );
+			exit ();
+			$model = new WechatModel ();
+			$orderID = "B" . mt_rand ( 10000, 99999 ) . time ();
+			$trade_no = date ( 'Ymdhis' ) . mt_rand ( 11, 99 ) . mt_rand ( 1, 9 );
+			$order = M ( 'order' );
+			if (isset ( $_POST ['address_id'] ) && isset ( $_POST ['weixin_user_id'] ) && isset ( $_POST ['total'] ) && isset ( $_POST ['dishData'] )) {
+				$_POST ['trade_no'] = $trade_no;
+				$_POST ['orderid'] = $orderID;
+				$_POST['date']=date('Y-m-d:h:m:s',time());
+				if ($order->add ( $order->create ( $_POST ) )) {
+					return $this->ajaxReturn ( [
+							'code' => 0,
+							'info' => 'add successful',
+							'data' => [ ]
+							] );
+				}else{
+					return $this->ajaxReturn ( [
+							'code' => 1,
+							'info' => 'params error',
+							'data' => [ ]
+							] );
+				}
 			}
-			
+			//$model->setBody ( 'this is a black cat' );
+			//$model->setTrade_no ( $trade_no );
+			//$model->setTotal ( $_POST ['total'] );
 		}
-			
 	}
 }

@@ -1,0 +1,6 @@
+/Application/Runtime/
+Config/dbs.php
+*.swp
+*.project
+htdocs
+.idea
