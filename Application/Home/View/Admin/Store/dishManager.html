@@ -59,8 +59,8 @@
 									<td><?php if($v['is_sale']==0){ echo "上架";}else{echo "下架";}; ?></td>			
 								 	<td>
 								 			<!-- <span><a href="{:U('Admin/accountDelete', array('id' => $val['id']))}"><i class="icon-trash"></i></a></span> -->
-								 			<span><a href="javascript:;" title="删除" data-id="<?php echo $v['id']; ?>" data-tag="<?php echo $v['store_name'] ?>" class="jagoFancybox-delete"><i class="icon-trash"></i></a></span>
-								 			<span><a href="javascript:;" title="删除" data-id="<?php echo $v['id']; ?>" data-tag="<?php echo $v['store_name'] ?>" class="jagoFancybox-delete"><i class="icon-edit"></i></a></span>							 
+								 			<span><a href="javascript:;" title="删除" data-id="<?php echo $v['id']; ?>" data-tag="<?php echo $v['dish_name'] ?>" class="jagoFancybox-delete"><i class="icon-trash"></i></a></span>
+								 			<span><a href="javascript:;" title="编辑" data-id="<?php echo $v['id']; ?>" data-tag="<?php echo $v['dish_name'] ?>" class="jagoFancybox-edit"><i class="icon-edit"></i></a></span>							 
 								 	</td >
 								 </tr>
 								<?php }?>
@@ -76,12 +76,13 @@
 							<div class="jagoFancybox-head">
 								<h4 class="title">店铺删除 <a href="#"><i class="icon-remove-sign pull-right jagoFancybox-cancel"></i></a></h4>
 							</div>
-							<form action="{:U('Store/dishAdd')}">
+							<form action="{:U('Store/dishDelete')}">
 								<div class="jagoFancybox-body">
 									<p class="jagoFancybox-headline">是否删除?</p>
 									<p class="jagoFancybox-content bold"></p>
 									<div class="none">
 										<input type="text" name="id">
+										 <input name="category_id" value="<?php echo $category[id]?>" type="hidden" class="form-control" id="store_id" placeholder="菜系" autocomplete="off" required="">
 									</div>
 								</div>
 								<div class="jagoFancybox-btn">
@@ -150,6 +151,64 @@
 								</div>
 						</div>
 					</div>
+					<!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+					<div class="box box-3">
+						<div class="add-hotel panel panel-default">
+							<div class="panel-heading">
+								<h4 class="title">编辑菜品<a href="#"><i class="icon-remove-sign pull-right jagoFancybox-cancel"></i></a></h4>
+							</div>
+								<div class="panel-body">
+									<form class="adminLogin" role="form" enctype="multipart/form-data" action="{:U('Store/dishEdit')}" method="POST">
+										<div class="box-left">
+										  <div class="form-group">
+										    <label for="dish_name">名称</label>
+										    <input name="dish_name" type="text" class="form-control" id="dish_name" placeholder="菜品名称" autocomplete="off" required="">
+										     <input name="dish_id" type="hidden" class="form-control" id="dish_id" placeholder="菜品ID" autocomplete="off" required="">
+										    <input name="category_id" value="<?php echo $category['id']?>" type="hidden" class="form-control" id="category_id" placeholder="菜品名称" autocomplete="分类ID" required="">
+										  </div>
+
+										  <div class="form-group">
+										    <label for="price">价格</label>
+										    <input name="price" type="text" class="form-control" id="price" placeholder="价格" autocomplete="off" required="">
+										  </div>
+										  
+										  <div class="form-group">
+										    <label class="" for="img">图片</label>
+										    <input name="img" type="file" class="form-control" id="img" placeholder="图片" autocomplete="off" required="">
+										  </div>
+										   <div class="form-group">
+										    <label for="count">数量</label>
+										    <input name="count" type="text" class="form-control" id="count" placeholder="数量" autocomplete="off" required="">
+										  </div>
+						
+									</div>
+
+									<div class="box-right">
+									   <div class="form-group">
+										    <label for="discount">折扣</label>
+										    <input name="discount" type="text" class="form-control" id="discount" placeholder="折扣" autocomplete="off" required="">
+										  </div>
+										<div class="form-group">
+												      <label for="is_sale">是否上架</label>
+												   <input name="is_sale"  type="radio" value="0" />上架&nbsp;&nbsp;
+												    <input name="is_sale"  type="radio" value="1" />下架
+										</div>
+															
+										  <div class="form-group">
+										    <label for="backup">备注</label>
+										    <textarea name="backup"  class="form-control" id="backup" placeholder="备注" autocomplete="off" ></textarea>
+										  </div>
+
+									</div>
+									<div class="text-center width-all clear">
+									  	<button type="submit" class="btn btn-primary btn-submit"><i class="icon-plus-sign-alt"></i> 编辑</button>
+									  	<p class="error-msg red pull-right"></p>
+									  </div>		 
+									</form>
+								</div>
+						</div>
+					</div>
+					<!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
 				</div>
 			</div>
 		
@@ -179,10 +238,39 @@
 							$('table').on("click",'.jagoFancybox-delete',function(){
 								var id=$(this).data('id');
 								var tag=$(this).data('tag');
-								$('.jagoFancybox .box-1').find('input').val(id);
+								$('.jagoFancybox .box-1').find('input').eq(0).val(id);
 								$('.jagoFancybox .box-1').find('p').eq(0).text(tag)
 								$('.jagoFancybox').addClass('active');
 								$(".box-1").addClass('active');
+							})
+							
+							
+							$('table').on("click",'.jagoFancybox-edit',function(){
+								var mythis=$(this);
+								var id=$(this).data('id');
+								$.ajax({
+									'url':'/Home/Store/dishEdit',
+									'type':'GET',
+									'data':{"id":id},
+									'dataType':'json',
+									'success':function(res){
+										$('.box-3').find('input').eq(0).val(res.data.dish_name)
+										$('.box-3').find('input').eq(1).val(id);//给隐藏的ID赋值
+										$('.box-3').find('input').eq(3).val(res.data.price)	
+										$('.box-3').find('input').eq(5).val(res.data.count)
+										$('.box-3').find('input').eq(6).val(res.data.discount)
+										$('.box-3').find('textarea').eq(0).val(res.data.backup)
+										if(res.data.is_sale==1){
+											$('.box-3').find('input').eq(7).removeAttr('checked');
+											$('.box-3').find('input').eq(8).attr('checked','checked');
+										}else{
+											$('.box-3').find('input').eq(8).removeAttr('checked');
+											$('.box-3').find('input').eq(7).attr('checked','checked');
+										}
+									}
+								})
+								$('.jagoFancybox').addClass('active');
+								$(".box-3").addClass('active');
 							})
 						});
 					})(jQuery);

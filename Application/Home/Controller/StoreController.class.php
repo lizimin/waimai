@@ -287,7 +287,7 @@ class StoreController extends AdminController {
 					if ($model->add ( $model->create ( $_POST ) )) {
 						$params = array (
 								'status' => 'success',
-								'info' => '分类添加添加成功!',
+								'info' => '分类添加成功!',
 								'pageName' => 'category',
 								'category_id' => $_POST ['category_id'] 
 						);
@@ -300,5 +300,77 @@ class StoreController extends AdminController {
 		}
 	}
 	
+	public function dishEdit(){
+		if(IS_AJAX){
+			$id=$_GET['id'];
+			$model = M ( 'dish' );
+			$data = $model->where ( 'id=' . $id )->select ()[0];
+			if ($data) {
+				$this->ajaxReturn ( [
+						'code' => 0,
+						'info' => 'get data success',
+						'data' => $data
+						] );
+			}
+		}
+		
+		if(IS_POST){
+			$upload = new \Think\Upload (); // 实例化上传类
+			$upload->maxSize = 3145728; // 设置附件上传大小
+			$upload->exts = array (
+					'jpg',
+					'gif',
+					'png',
+					'jpeg'
+			); // 设置附件上传类型
+			$upload->rootPath = './Upload/'; // 设置附件上传根目录
+			$upload->savePath = 'dish/'; // 设置附件上传（子）目录
+			$info = $upload->upload ();
+			if (! $info) { // 上传错误提示错误信息
+				$this->error ( $upload->getError () );
+			} else { // 上传成功
+				if (isset ( $info ['img'] )) {
+					$_POST ['img'] = '/Upload/' . $info ['img'] ['savepath'] . $info ['img'] ['savename'];
+					$model = M ( 'dish' );
+					if ($model->where('id='.$_POST['dish_id'])->save( $model->create ( $_POST ) )) {
+						$params = array (
+								'status' => 'success',
+								'info' => '菜品编辑成功!',
+								'pageName' => 'category',
+								'category_id' => $_POST ['category_id']
+						);
+						$this->redirect ( 'Store/dishManager', $params );
+					} else {
+						die ( $model->getDbError () );
+					}
+				}
+			}
+		}
+	}
+	
+	public function dishDelete(){
+		if(IS_GET){
+			$model=M('dish');
+			if($model->where('id='.$_GET['id'])->delete()){
+				$params = array (
+								'status' => 'success',
+								'info' => '菜品删除成功!',
+								'pageName' => 'category',
+								'category_id' => $_GET ['category_id']
+						);
+						$this->redirect ( 'Store/dishManager', $params );
+				$this->redirect ( 'Store/dishManager', $params );
+			}else{
+				$params = array (
+								'status' => 'success',
+								'info' => '菜品删除失败!',
+								'pageName' => 'category',
+								'category_id' => $_GET ['category_id']
+						);
+						$this->redirect ( 'Store/dishManager', $params );
+				$this->redirect ( 'Store/dishManager', $params );
+			}
+		}
+	}
 	
 }
