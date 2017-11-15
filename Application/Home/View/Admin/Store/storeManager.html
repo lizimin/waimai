@@ -24,7 +24,7 @@
 				<include file="StoreCommon:adminSidebar"/>
 				<div class="content pull-right">
 					<div class="account-manage">
-						<h1 class="headline text-center bold"><?php echo $data['store_name']?></h1>
+						<h1 class="headline text-center bold"><?php echo $data['category_name']?></h1>
 
 						<div class="tools">
 							<ul>
@@ -53,7 +53,7 @@
 									<td><?php if($v['is_sale']==0){ echo "上架";}else{echo "下架";}; ?></td>			
 								 	<td>
 								 			<!-- <span><a href="{:U('Admin/accountDelete', array('id' => $val['id']))}"><i class="icon-trash"></i></a></span> -->
-								 			<span><a href="javascript:;" title="删除" data-id="<?php echo $v['id']; ?>" data-tag="<?php echo $v['store_name'] ?>" class="jagoFancybox-delete"><i class="icon-trash"></i></a></span>
+								 			<span><a href="javascript:;" title="删除" data-id="<?php echo $v['id']; ?>" data-tag="<?php echo $v['category_name'] ?>" class="jagoFancybox-delete"><i class="icon-trash"></i></a></span>
 								 			<span><a href="javascript:;" title="编辑" data-id="<?php echo $v['id']; ?>" data-tag="<?php echo $v['store_name'] ?>" class="jagoFancybox-edit"><i class="icon-edit"></i></a></span>
 								 			<span><a href="<?php echo U('store/dishManager',array('category_id'=>$v['id']))?>" title="添加菜系" data-id="<?php echo $v['id']; ?>" data-tag="<?php echo $v['store_name'] ?>"><i class="icon-desktop"></i></a></span>								 
 								 	</td >
@@ -71,12 +71,13 @@
 							<div class="jagoFancybox-head">
 								<h4 class="title">店铺删除 <a href="#"><i class="icon-remove-sign pull-right jagoFancybox-cancel"></i></a></h4>
 							</div>
-							<form action="{:U('Store/storeDelete')}">
+							<form action="{:U('Store/categoryDelete')}">
 								<div class="jagoFancybox-body">
 									<p class="jagoFancybox-headline">是否删除?</p>
 									<p class="jagoFancybox-content bold"></p>
-									<div class="none">
-										<input type="text" name="id">
+									<div class="none">			
+									<input type="text" name="id">
+									 <input name="store_id" value="<?php echo $data[id]?>" type="hidden" class="form-control" id="store_id" placeholder="菜系" autocomplete="off" required="">
 									</div>
 								</div>
 								<div class="jagoFancybox-btn">
@@ -132,11 +133,12 @@
 								<h4 class="title">编辑分类 <a href="#"><i class="icon-remove-sign pull-right jagoFancybox-cancel"></i></a></h4>
 							</div>
 								<div class="panel-body">
-												<form class="adminLogin" role="form" enctype="multipart/form-data" action="{:U('Store/categoryAdd')}" method="POST">
+												<form class="adminLogin" role="form" enctype="multipart/form-data" action="{:U('Store/categoryEdit')}" method="POST">
 												  <div class="form-group">
 												    <label for="category_name">菜系</label>
 												    <input name="category_name" type="text" class="form-control" id="category_name" placeholder="菜系" autocomplete="off" required="">
 												    <input name="store_id" value="<?php echo $data[id]?>" type="hidden" class="form-control" id="store_id" placeholder="菜系" autocomplete="off" required="">
+												     <input name="category_id" value="" type="hidden" class="form-control" id="category_id" placeholder="菜系" autocomplete="off" required="">
 												  </div>
 
 													<div class="form-group">
@@ -145,7 +147,7 @@
 													 </div>
 
 												  <div class="form-group">
-												    <label for="is_sale"> <input name="is_sale" checked="checked" type="radio" value="0" />上架</label>&nbsp;&nbsp;
+												    <label for="is_sale"> <input name="is_sale"  type="radio" value="0" />上架</label>&nbsp;&nbsp;
 												    <label for="is_sale"> <input name="is_sale"  type="radio" value="1" />下架</label>
 												  </div>
 															  
@@ -185,6 +187,26 @@
 							});
 							
 							$('table').on('click','.jagoFancybox-edit',function(){
+								var mythis=$(this);
+								var id=$(this).data('id');
+								$.ajax({
+									'url':'/Home/Store/categoryEdit',
+									'type':'GET',
+									'data':{"id":id},
+									'dataType':'json',
+									'success':function(res){
+										$('.box-3').find('input').eq(0).val(res.data.category_name)
+									    $('.box-3').find('input').eq(2).val(id);
+										$('.box-3').find('textarea').eq(0).val(res.data.describe)
+										if(res.data.is_sale==1){
+											$('.box-3').find('input').eq(4).removeAttr('checked');
+											$('.box-3').find('input').eq(5).attr('checked','checked');
+										}else{
+											$('.box-3').find('input').eq(5).removeAttr('checked');
+											$('.box-3').find('input').eq(4).attr('checked','checked');
+										}
+									}
+								})
 								$('.jagoFancybox').addClass('active');
 								$('.jagoFancybox .box-3').addClass('active');
 							})
@@ -198,7 +220,7 @@
 							$('table').on("click",'.jagoFancybox-delete',function(){
 								var id=$(this).data('id');
 								var tag=$(this).data('tag');
-								$('.jagoFancybox .box-1').find('input').val(id);
+								$('.jagoFancybox .box-1').find('input').eq(0).val(id);
 								$('.jagoFancybox .box-1').find('p').eq(0).text(tag)
 								$('.jagoFancybox').addClass('active');
 								$(".box-1").addClass('active');

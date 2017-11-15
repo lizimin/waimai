@@ -167,6 +167,92 @@ class StoreController extends AdminController {
 			}
 		}
 	}
+	
+	public function categoryEdit(){
+		if (IS_AJAX) {
+			$id = $_GET ['id'];
+			$model = M ( 'category' );
+			$data = $model->where ( 'id=' . $id )->select ()[0];
+			if ($data) {
+				$this->ajaxReturn ( [
+						'code' => 0,
+						'info' => 'get data success',
+						'data' => $data
+						] );
+			}
+		}
+		
+		if(IS_POST){
+			$upload = new \Think\Upload (); // 实例化上传类
+			$upload->maxSize = 3145728; // 设置附件上传大小
+			$upload->exts = array (
+					'jpg',
+					'gif',
+					'png',
+					'jpeg'
+			); // 设置附件上传类型
+			$upload->rootPath = './Upload/'; // 设置附件上传根目录
+			$upload->savePath = 'category/'; // 设置附件上传（子）目录
+			// 上传文件
+			$info = $upload->upload ();
+			if (! $info) { // 上传错误提示错误信息
+				$this->error ( $upload->getError () );
+			} else { // 上传成功
+				if (isset ( $info ['img'] )) {
+					$_POST ['img'] = '/Upload/' . $info ['img'] ['savepath'] . $info ['img'] ['savename'];
+					$model = M ( 'category' );
+					if ($model->where ( 'id=' . $_POST ['category_id'] )->save ( ($model->create ( $_POST )) )) {
+						$params = array (
+								'status' => 'success',
+								'info' => '分类编辑成功!',
+								'pageName' => 'category',
+								'id' => $_POST ['store_id'] 
+						);
+						$this->redirect ( 'Store/storeManager', $params );
+					} else {
+						die ( $model->getDbError () );
+					}
+				}
+			}
+		}
+	}
+	
+	public function categoryDelete(){
+		if(isset($_GET['id'])){
+			$dish=M('dish');
+			$cate=M('category');
+			$has=$dish->where('category_id='.$_GET['id'])->select();
+			if($has){
+				$params = array (
+						'status' => 'success',
+						'info' => '请先删除分类',
+						'pageName' => 'category',
+						'id' => $_GET ['store_id']
+				);
+				$this->redirect ( 'Store/storeManager', $params );
+			}else{
+				if($cate->where("id=".$_GET['id'])->delete()){
+					$params = array (
+							'status' => 'success',
+							'info' => '删除成功',
+							'pageName' => 'category',
+							'id' => $_GET ['store_id']
+					);
+					$this->redirect ( 'Store/storeManager', $params );
+				}else{
+					$params = array (
+							'status' => 'fail',
+							'info' => '删除失败',
+							'pageName' => 'category',
+							'id' => $_GET ['store_id']
+					);
+					$this->redirect ( 'Store/storeManager', $params );
+				}
+			}
+		}
+
+	}
+	
 	public function dishManager() {
 		if (IS_GET) {
 			$category_id = $_GET ['category_id'];
@@ -215,7 +301,4 @@ class StoreController extends AdminController {
 	}
 	
 	
-	public function dishEdit(){
-		
-	}
 }
