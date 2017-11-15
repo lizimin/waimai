@@ -1,0 +1,341 @@
+<html>
+	<head>
+		<title>点度后台管理</title>
+		<include file="brandCommon:head"/>
+		<style>
+			table tbody tr { transition: all 0.3s ease-in-out; }
+			table tbody tr td span { display: inline-block; padding: 0 3px; }
+			.no-view { background: #2e3252 !important; color: #fff !important; border-top: 1px solid #fff; }
+			.no-view span i { color: #fff; }
+		</style>
+	</head>
+	<body>
+		<div class="wrapper admin">
+				<include file="brandCommon:alert"/>
+			<include file="brandCommon:adminHeader"/>
+			<div class="middle-content">
+				<include file="brandCommon:adminSidebar"/>
+				<div class="content pull-right">
+					<div class="message">
+						<h1 class="headline text-center bold">订单信息</h1>
+
+						
+						<div class="tools">
+							<ul>
+								<li>
+									<p><a data-status="-1" class="btn btn-tools btn-search-status active" href="#">全部订单</a></p>
+								</li>
+								<li>
+									<p><a data-status="0" class="btn btn-tools btn-search-status" href="#">未付钱<span class="badge message-new-all bg-yellow"><?php echo $pending; ?></span></a></p>
+								</li>
+								<li>
+									<p><a data-status="1" class="btn btn-tools btn-search-status" href="#">已付钱</a></p>
+								</li>
+								<li>
+									<p><a data-status="2" class="btn btn-tools btn-search-status" href="#">退款中 <span class="badge message-new-all bg-yellow"><?php echo $refunding; ?></span></a></p>
+								</li>
+								<li>
+									<p><a data-status="3" class="btn btn-tools btn-search-status" href="#">已退款</a></p>
+								</li>
+							</ul>
+						</div>
+
+						<table class="table table-striped table-hover">
+							<thead>
+								<tr>
+									<td width="15%">订单号</td>
+									<td width="10%">总价</td>
+									<td width="10%">下单日期</td>
+									<td width="15%">店家名称</td>
+									<td width="15%">用户姓名</td>
+									<td width="15%">用户电话</td>
+									<td width="10%">状态</td>
+									<td width="15%">操作</td>
+								</tr>
+							</thead>
+							<tbody>
+							<?php foreach($data as $k=>$v){?>
+								 <tr data-id="<?php echo $val['id']; ?>" class="order-view ">
+								 	<td><?php echo $v['orderid']?></td>
+								 	<td><?php echo $v['total']?></td>
+								 	<td><?php echo $v['date']?></td>
+								 	<td><?php echo $v['store_name']?></td>
+								 	<td><?php echo $v['name']?></td>
+								 	<td><?php echo $v['phone']?></td>
+									<td><?php 
+									if($v['status']==0){
+										echo "未付款";
+									}
+									if($v['status']==1){
+										echo "已经付钱";
+                                    }
+								    if($v['status']==2){
+ 										echo "退款中";
+									}
+									if($v['status']==3){
+										echo "已经退款";
+									}
+
+									?></td>
+								 	<td>
+							
+								 	</td>
+								 </tr>
+							<?php }?>
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<div class="clear"></div>
+			</div>
+		</div>
+
+		<div class="jagoFancybox">
+			<div class="cus-table">
+				<div class="cus-table-cell">
+					<div class="box box-1">
+						<div class="jagoFancybox-confirm-ctn">
+							<div class="jagoFancybox-head">
+								<h4 class="title">订单删除 <a href="#"><i class="icon-remove-sign pull-right jagoFancybox-cancel"></i></a></h4>
+							</div>
+							<form action="{:U('Admin/orderDelete')}">
+								<div class="jagoFancybox-body">
+									<p class="jagoFancybox-headline">是否删除?</p>
+									<p class="jagoFancybox-content bold"></p>
+									<div class="none">
+										<input type="text" name="deleteId">
+									</div>
+								</div>
+								<div class="jagoFancybox-btn">
+									<button type="submit" class="btn btn-primary pull-left" href="#">确认</button>
+									<a class="btn btn-default pull-right jagoFancybox-cancel" href="#">取消</a>
+								</div>
+							</form>
+						</div>
+					</div>
+
+					<div class="box box-2">
+						<div class="jagoFancybox-confirm-ctn">
+							<div class="jagoFancybox-head">
+								<h4 class="title">确认退款? <a href="#"><i class="icon-remove-sign pull-right jagoFancybox-cancel"></i></a></h4>
+							</div>
+							<form action="{:U('Admin/orderStatusUpdate')}">
+								<div class="jagoFancybox-body">
+									<p class="jagoFancybox-headline">确认退款给该用户?</p>
+									<p class="jagoFancybox-content bold"></p>
+									<div class="none">
+										<input type="text" name="deleteId">
+										<input type="text" name="status" value="3">
+									</div>
+								</div>
+								<div class="jagoFancybox-btn">
+									<button type="submit" class="btn btn-primary pull-left" href="#">确认</button>
+									<a class="btn btn-default pull-right jagoFancybox-cancel" href="#">取消</a>
+								</div>
+							</form>
+						</div>
+					</div>
+
+					<div class="box box-3">
+						<div class="jagoFancybox-confirm-ctn">
+							<div class="jagoFancybox-head">
+								<h4 class="title">确认入住? <a href="#"><i class="icon-remove-sign pull-right jagoFancybox-cancel"></i></a></h4>
+							</div>
+							<form action="{:U('Admin/orderStatusUpdate')}">
+								<div class="jagoFancybox-body">
+									<p class="jagoFancybox-headline">确认该用户入住?</p>
+									<p class="jagoFancybox-content bold"></p>
+									<div class="none">
+										<input type="text" name="deleteId">
+										<input type="text" name="status" value="1">
+									</div>
+								</div>
+								<div class="jagoFancybox-btn">
+									<button type="submit" class="btn btn-primary pull-left" href="#">确认</button>
+									<a class="btn btn-default pull-right jagoFancybox-cancel" href="#">取消</a>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script>
+		(function($) {
+			$(function() {
+				$('.btn.btn-tools').on('click', function() {
+					$('.btn.btn-tools').removeClass('active');
+					$(this).addClass('active');
+					return false;
+				});
+
+				$('.btn-search-status').on('click', function() {
+					var that = $(this);
+					var status = $(this).data('status');
+					$.ajax({
+						url: '{:U("Order/orderSelectByStatusAjaxReturn")}',
+						type: 'POST',
+						data: {status: status}
+					}).done(function(res) {
+						//console.log(res);
+						$('table tbody').html('');
+						if (res.data) {
+							
+							var count;
+							if (status == 0 || status == 2) {
+								count = res.data.length;
+								that.find('span').html(count);
+							}
+						}
+						var refund = '';
+						if (res.status == 'success') {
+							res.data.forEach(function(val,key) {
+								if (val.status == '0') {
+									val.status = '未付钱';
+									refund = '<span><a title="待付钱" data-id="'+ val.id +'" data-tag="'+ val.order_number +'" class="jagoFancybox-order-agree-check-in" href="#"><i class="icon-signin"></i></a></span>';
+									$('table tbody').append(
+										'<tr data-id="'+ val.id +'" class="order-view ">' +
+											'<td>'+ val.orderid +'</td>' +
+										 	'<td>'+ val.total +'</td>' +
+										 	'<td>'+ val.date +'<p>-------------</p>'+ val.check_out +'</td>' +
+										 	'<td>'+ val.store_name +'</td>' +
+										 	'<td>'+ val.name +'</td>' +
+											'<td>' + val.phone +'</td>' +
+											'<td>未付钱</td>' +
+										 	'<td>' +
+									 			'<?php if(session('level') == 10): ?><span><a title="删除" data-id="'+ val.id +'" data-tag="'+ val.order_number +'" class="jagoFancybox-delete-order" href="#"><i class="icon-trash"></i></a></span><?php endif ?>'+
+									 			refund +
+										 	'</td>' +
+									 	'</tr>'
+									);
+								}
+								else if (val.status == '1') {
+									val.status = '已付钱';
+									refund = '';
+									$('table tbody').append(
+										'<tr data-id="'+ val.id +'" class="order-view ">' +
+										'<td>'+ val.orderid +'</td>' +
+									 	'<td>'+ val.total +'</td>' +
+									 	'<td>'+ val.date +'<p>-------------</p>'+ val.check_out +'</td>' +
+									 	'<td>'+ val.store_name +'</td>' +
+									 	'<td>'+ val.name +'</td>' +
+										'<td>' + val.phone +'</td>' +
+										'<td>已付钱</td>' +
+									 	'<td>' +
+									 			'<?php if(session('level') == 10): ?><span><a title="删除" data-id="'+ val.id +'" data-tag="'+ val.order_number +'" class="jagoFancybox-delete-order" href="#"><i class="icon-trash"></i></a></span><?php endif ?>'+
+									 			refund +
+										 	'</td>' +
+									 	'</tr>'
+									);
+								}
+								else if (val.status == '2') {
+									val.status = '退款中';
+									refund = '<span><a title="确认退款" data-id="'+ val.id +'" data-tag="'+ val.order_number +'" class="jagoFancybox-order-agree-refund" href="#"><i class="icon-check"></i></a></span>';
+									$('table tbody').append(
+										'<tr data-id="'+ val.id +'" class="order-view ">' +
+										'<td>'+ val.orderid +'</td>' +
+									 	'<td>'+ val.total +'</td>' +
+									 	'<td>'+ val.date +'<p>-------------</p>'+ val.check_out +'</td>' +
+									 	'<td>'+ val.store_name +'</td>' +
+									 	'<td>'+ val.name +'</td>' +
+										'<td>' + val.phone +'</td>' +
+										'<td>退款中</td>' +
+									 	'<td>' +
+									 			'<?php if(session('level') == 10): ?><span><a title="删除" data-id="'+ val.id +'" data-tag="'+ val.order_number +'" class="jagoFancybox-delete-order" href="#"><i class="icon-trash"></i></a></span><?php endif ?>'+
+									 			refund +
+										 	'</td>' +
+									 	'</tr>'
+									);
+								}
+								else if (val.status == '3') {
+									val.status = '已退款';
+									refund = '';
+									$('table tbody').append(
+										'<tr data-id="'+ val.id +'" class="order-view ">' +
+										'<td>'+ val.orderid +'</td>' +
+									 	'<td>'+ val.total +'</td>' +
+									 	'<td>'+ val.date +'<p>-------------</p>'+ val.check_out +'</td>' +
+									 	'<td>'+ val.store_name +'</td>' +
+									 	'<td>'+ val.name +'</td>' +
+										'<td>' + val.phone +'</td>' +
+										'<td>已经退款</td>' +
+									 	'<td>' +
+									 			'<?php if(session('level') == 10): ?><span><a title="删除" data-id="'+ val.id +'" data-tag="'+ val.order_number +'" class="jagoFancybox-delete-order" href="#"><i class="icon-trash"></i></a></span><?php endif ?>'+
+									 			refund +
+										 	'</td>' +
+									 	'</tr>'
+									);
+								}
+								// if (val.view == 0) {
+								// 	val.view = 'no-view';
+								// 	refund = '';
+								// }
+
+
+							});
+						}
+					});
+				});
+
+				$('table').on('click', '.order-view', function() {
+					var that = $(this);
+					var id = $(this).data('id');
+					$.ajax({
+						url: '{:U("Admin/orderViewChangeAjaxReturn")}',
+						type: 'POST',
+						data: {id: id}
+					}).done(function(res) {
+						if (res.status == 'success') {
+							that.removeClass('no-view');
+							var ctn = $('.sidebar .badge.message-new-all');
+							var count = ctn.html();
+							count--;
+							ctn.html(count);
+						}
+					});
+				});
+
+				$('table').on('click', '.jagoFancybox-delete-order', function() {
+					var id = $(this).data('id');
+					var content = $(this).data('tag');
+
+					$('.jagoFancybox').addClass('active');
+					$('.jagoFancybox .box-1').addClass('active');
+					
+					$('.box-1 .jagoFancybox-confirm-ctn input[name="deleteId"]').val(id);
+					$('.box-1 .jagoFancybox-confirm-ctn .jagoFancybox-content').html('');
+					$('.box-1 .jagoFancybox-confirm-ctn .jagoFancybox-content').append(content);
+					return false;
+				});
+
+				$('table').on('click', '.jagoFancybox-order-agree-refund', function() {
+					var id = $(this).data('id');
+					var content = $(this).data('tag');
+
+					$('.jagoFancybox').addClass('active');
+					$('.jagoFancybox .box-2').addClass('active');
+					
+					$('.box-2 .jagoFancybox-confirm-ctn input[name="deleteId"]').val(id);
+					$('.box-2 .jagoFancybox-confirm-ctn .jagoFancybox-content').html('');
+					$('.box-2 .jagoFancybox-confirm-ctn .jagoFancybox-content').append(content);
+					return false;
+				});
+
+				$('table').on('click', '.jagoFancybox-order-agree-check-in', function() {
+					var id = $(this).data('id');
+					var content = $(this).data('tag');
+
+					$('.jagoFancybox').addClass('active');
+					$('.jagoFancybox .box-3').addClass('active');
+					
+					$('.box-3 .jagoFancybox-confirm-ctn input[name="deleteId"]').val(id);
+					$('.box-3 .jagoFancybox-confirm-ctn .jagoFancybox-content').html('');
+					$('.box-3 .jagoFancybox-confirm-ctn .jagoFancybox-content').append(content);
+					return false;
+				});
+			});
+		})(jQuery);
+		</script>
+	</body>
+</html>

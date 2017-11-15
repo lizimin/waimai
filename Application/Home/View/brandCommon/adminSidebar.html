@@ -32,7 +32,14 @@
 				<div class="arrow-right-ctn"><div class="cus-table"><div class="cus-table-cell"><div class="arrow"><i class="icon-angle-right white"></i></div></div></div></div>
 			</div>
 		</li>
->
+		
+	   <li class="<?php if($pageName == 'order'){ echo 'active'; } ?>">
+			<div class="relative first-level">
+				<p><a href="{:U('Order/orderList', array('pageName' => 'order'))}"><i class="icon-desktop"></i>订单管理</a></p>
+				<div class="arrow-right-ctn"><div class="cus-table"><div class="cus-table-cell"><div class="arrow"><i class="icon-angle-right white"></i></div></div></div></div>
+			</div>
+		</li>
+
 		
 		<!-- <li class="<?php if($pageName == 'message'){ echo 'active'; } ?>">
 			<div class="relative first-level">

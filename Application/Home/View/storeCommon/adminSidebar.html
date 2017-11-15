@@ -39,6 +39,13 @@
 				<div class="arrow-right-ctn"><div class="cus-table"><div class="cus-table-cell"><div class="arrow"><i class="icon-angle-right white"></i></div></div></div></div>
 			</div>
 		</li>
+		
+		  <li class="<?php if($pageName == 'order'){ echo 'active'; } ?>">
+			<div class="relative first-level">
+				<p><a href="{:U('Order/orderList', array('pageName' => 'order'))}"><i class="icon-desktop"></i>订单管理</a></p>
+				<div class="arrow-right-ctn"><div class="cus-table"><div class="cus-table-cell"><div class="arrow"><i class="icon-angle-right white"></i></div></div></div></div>
+			</div>
+		</li>
 		<!-- <li class="<?php if($pageName == 'message'){ echo 'active'; } ?>">
 			<div class="relative first-level">
 				<p><a href="{:U('Admin/toMessage', array('pageName' => 'message'))}"><i class="icon-envelope"></i> 用户留言 <?php if($result != 0): ?><span class="badge message-new-all bg-yellow"><?php echo $result; ?></span><?php endif; ?></a></p>
