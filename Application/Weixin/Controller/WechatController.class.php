@@ -205,42 +205,49 @@ class WechatController extends Controller {
 			}
 		}
 	}
-	public function getOrder(){
-		if(IS_GET){
-			$weixin_user_id=$_GET['weixin_user_id'];
-			if(isset($_GET['weixin_user_id'])&&isset($_GET['status'])){
-				$model=M('order');
-				$where['weixin_user_id']=$weixin_user_id;
-				if($_GET['status']==0){
-					$where['status']=0;
+	public function getOrder() {
+		if (IS_GET) {
+			$weixin_user_id = $_GET ['weixin_user_id'];
+			if (isset ( $_GET ['weixin_user_id'] ) && isset ( $_GET ['status'] )) {
+				$model = M ( 'order' );
+				$where ['weixin_user_id'] = $weixin_user_id;
+				if ($_GET ['status'] == 0) {
+					$where ['status'] = 0;
 				}
-				if($_GET['status']==1){
-					$where['status']=1;
+				if ($_GET ['status'] == 1) {
+					$where ['status'] = 1;
 				}
-				if($_GET['status']==2){
-					$where['status']=2;
+				if ($_GET ['status'] == 2) {
+					$where ['status'] = 2;
 				}
-				$myOrder=array();
-				$data=M('order')->where($where)->select();
-				foreach($data as $k=>$v){
-					$myOrder[$k]['date']=$v['date'];
-					$myOrder[$k]['status']=$v['status'];
-					$myOrder[$k]['dishData']=json_decode($v['dishdata']);
-					$myOrder[$k]['id']=$v['id'];
+				if ($_GET ['status'] == 3) {
+					$where ['status'] = 3;
 				}
-				$this->ajaxReturn(['code'=>0,'info'=>'Data return success','data'=>$myOrder]);
-				
-			}else{
-				$this->ajaxReturn(['code'=>1,'info'=>'params error','data'=>[]]);
+				$myOrder = array ();
+				$data = M ( 'order' )->where ( $where )->select ();
+				foreach ( $data as $k => $v ) {
+					$myOrder [$k] ['date'] = $v ['date'];
+					$myOrder [$k] ['status'] = $v ['status'];
+					$myOrder [$k] ['dishData'] = json_decode ( $v ['dishdata'] );
+					$myOrder [$k] ['id'] = $v ['id'];
+				}
+				$this->ajaxReturn ( [ 
+						'code' => 0,
+						'info' => 'Data return success',
+						'data' => $myOrder 
+				] );
+			} else {
+				$this->ajaxReturn ( [ 
+						'code' => 1,
+						'info' => 'params error',
+						'data' => [ ] 
+				] );
 			}
-			
 		}
 	}
 	public function createOrder() {
 		header ( 'Content-Type:application/json; charset=utf-8' );
 		if (IS_POST) {
-			// var_dump ( $_POST );
-			// exit ();
 			$model = new WechatModel ();
 			$orderID = "B" . mt_rand ( 10000, 99999 ) . time ();
 			$trade_no = date ( 'Ymdhis' ) . mt_rand ( 11, 99 ) . mt_rand ( 1, 9 );
@@ -268,4 +275,23 @@ class WechatController extends Controller {
 			// $model->setTotal ( $_POST ['total'] );
 		}
 	}
+	public function brandApply() {
+		if (IS_POST) {
+			$model = M ( 'brand_apply' );
+			if ($model->add ( $model->create ( $_POST ) )) {
+				return $this->ajaxReturn ( [ 
+						'code' => 0,
+						'info' => 'add suuccess',
+						'data' => [ ] 
+				] );
+			} else {
+				return $this->ajaxReturn ( [ 
+						'code' => 1,
+						'info' => 'params error',
+						'data' => [ ] 
+				] );
+			}
+		}
+	}
+
 }

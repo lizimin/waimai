@@ -1,0 +1,199 @@
+<html>
+	<head>
+		<title>点度后台管理</title>
+		<include file="Common:head"/>
+		<style>
+			table tbody tr { transition: all 0.3s ease-in-out; }
+			table tbody tr td span { display: inline-block; padding: 0 3px; }
+			.no-view { background: #2e3252 !important; color: #fff !important; border-top: 1px solid #fff; }
+			.no-view span i { color: #fff; }
+			.detail-control { margin-top: 5px; }
+			.detail-control .detail-add { width: 50%; margin-right: 10px; }
+			.member-entry { margin-top: 5px; display: inline-block; width: 100%; }
+			.member-entry input { width: 27%; margin-right: 3.33%; }
+			.jagoFancybox .box { width: 45%; }
+			.jagoFancybox .box .box-left { width: 49%; float: left; }
+			.jagoFancybox .box .box-right { width: 49%; float: right; }
+		</style>
+	</head>
+	<body>
+		<div class="wrapper admin">
+			<include file="Common:alert"/>
+			<include file="Common:adminHeader"/>
+			<div class="middle-content">
+				<include file="Common:adminSidebar"/>
+				<div class="content pull-right">
+					<div class="account-manage">
+						<h1 class="headline text-center bold">商家入驻</h1>
+
+						<div class="tools">
+							<!--<ul>
+									<li>
+										<p><a class="btn btn-tools btn-add-brand" href="#"><i class="icon-plus-sign-alt"></i> 添加商户</a></p>
+									</li>
+							</ul>-->
+						</div>
+
+						<table class="table table-striped table-hover">
+							<thead>
+								<tr>
+									<td width="20%">姓名</td>
+									<td width="25%">手机号</td>
+									<td width="20%">留言</td>
+									<td width="20%">是否确认</td>
+									<td width="25%">操作</td>
+								</tr>
+							</thead>
+							<tbody>
+								<?php foreach($data as $k=>$v){?>
+								 <tr>
+								 	<td><?php echo $v['name']; ?></td>
+								 	<td><?php echo $v['phone']; ?></td>
+									<td><?php echo $v['message']; ?></td>
+									<td><?php echo $v['status']==0?'未确认':'已确认'; ?></td>
+								 	<td>
+								 	<?php if($v['status']==0){?>
+								 			<span><a href="<?php echo U('Brand/brandConfirm',array('id'=>$v['id']))?>" title="确认" data-id="<?php echo $v['id']; ?>" data-tag="<?php echo $v['username'] ?>" class="jagoFancybox-confirm"><i class="icon-ok"></i></a></span>	
+								 	<?php }?>							 
+								 	</td >
+								 </tr>
+								<?php }?>
+							</tbody>
+						</table>
+
+						
+			<div class="jagoFancybox">
+			<div class="cus-table">
+				<div class="cus-table-cell">
+					<div class="box box-1">
+						<div class="jagoFancybox-confirm-ctn">
+							<div class="jagoFancybox-head">
+								<h4 class="title">商户删除 <a href="#"><i class="icon-remove-sign pull-right jagoFancybox-cancel"></i></a></h4>
+							</div>
+							<form action="{:U('Brand/brandDelete')}">
+								<div class="jagoFancybox-body">
+									<p class="jagoFancybox-headline">是否删除?</p>
+									<p class="jagoFancybox-content bold"></p>
+									<div class="none">
+										<input type="text" name="id">
+									</div>
+								</div>
+								<div class="jagoFancybox-btn">
+									<button type="submit" class="btn btn-primary pull-left" href="#">确认</button>
+									<a class="btn btn-default pull-right jagoFancybox-cancel" href="#">取消</a>
+								</div>
+							</form>
+						</div>
+					</div>
+
+					<div class="box box-2">
+						<div class="add-hotel panel panel-default">
+							<div class="panel-heading">
+								<h4 class="title">商户添加 <a href="#"><i class="icon-remove-sign pull-right jagoFancybox-cancel"></i></a></h4>
+							</div>
+							<div class="panel-body">
+								<form class="adminLogin inblk" enctype="multipart/form-data" role="form" action="{:U('Brand/brandAdd')}" method="POST">
+									<div class="box-left">
+										  <div class="form-group">
+										    <label for="name">商户名称</label>
+										    <input name="brand_name" type="text" class="form-control" id="name" placeholder="商户名称" autocomplete="off" required="">
+										  </div>
+					
+										  <div class="form-group">
+										    <label for="address">地址</label>
+										    <input name="address" type="address" class="form-control" id="address" placeholder="地址" autocomplete="off" required="">
+										  </div>
+
+										  <div class="form-group">
+										    <label for="phone">联系方式</label>
+										    <input name="contact" type="text" class="form-control" id="phone" placeholder="电话" autocomplete="off" required="">
+										  </div>
+										  <div class="form-group">
+										    <label class="" for="image">图片</label>
+										    <input name="img" type="file" class="form-control" id="image" placeholder="图片" autocomplete="off" required="">
+										  </div>
+										  
+										  <div class="form-group">
+										    <label for="describe">描述</label>
+										    <textarea name="describe"  class="form-control" id="describe" placeholder="商户描述" autocomplete="off" ></textarea>
+										  </div>
+									</div>
+
+									<div class="box-right">
+										  <div class="form-group">
+										    <label for="username">用户名</label>
+										    <input name="username" type="text" class="form-control" id="theme" placeholder="用户名" autocomplete="off" required="">
+										  </div>
+										  
+										  <div class="form-group">
+										    <label for="password">用户密码</label>
+										    <input name="password" type="password" class="form-control" id="theme" placeholder="用户密码" autocomplete="off" required="">
+										  </div>
+										  
+										  <div class="form-group">
+										    <label for="nickname">昵称</label>
+										    <input name="nickname" type="text" class="form-control" id="theme" placeholder="用户昵称" autocomplete="off" >
+										  </div>
+										  
+										   <div class="form-group">
+										    <label for="phone">电话</label>
+										    <input name="phone" type="text" class="form-control" id="theme" placeholder="用户电话" autocomplete="off" >
+										  </div>
+						
+										  <div class="form-group">
+										    <label class="" for="theme_image">用户头像</label>
+										    <input name="userimg" type="file" class="form-control" id="theme_image" placeholder="用户头像" autocomplete="off" >
+										  </div>
+
+									</div>
+									<div class="text-center width-all clear">
+									  	<button type="submit" class="btn btn-primary btn-submit"><i class="icon-plus-sign-alt"></i> 添加</button>
+									  	<p class="error-msg red pull-right"></p>
+									  </div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		
+
+			</div>
+
+					<style>
+						table.table thead tr td { font-weight: bold; }
+						.jagoFancybox .box { width: 20%; left: 40%; }
+					</style>
+
+					<script>
+					(function ($) {
+						$(function() {
+							// tools add account
+							$('.btn-add-account').on('click', function() {
+								$('.jagoFancybox').addClass('active');
+								$('.jagoFancybox .box-1').addClass('active');
+							});
+
+							$('.btn-add-brand').on('click', function() {
+								$('.jagoFancybox').addClass('active');
+								$('.jagoFancybox .box-2').addClass('active');
+								return false;
+							});
+							
+							$('table').on("click",'.jagoFancybox-delete',function(){
+								var id=$(this).data('id');
+								var tag=$(this).data('tag');
+								$('.jagoFancybox .box-1').find('input').val(id);
+								$('.jagoFancybox .box-1').find('p').eq(0).text(tag)
+								$('.jagoFancybox').addClass('active');
+								$(".box-1").addClass('active');
+							})
+						});
+					})(jQuery);
+					</script>
+				</div>
+				<div class="clear"></div>
+			</div>
+		</div>
+	</body>
+</html>

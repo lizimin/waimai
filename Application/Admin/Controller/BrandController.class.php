@@ -95,4 +95,35 @@ class BrandController extends AdminController {
 			}
 		}
 	}
+	
+	public function brandApply(){
+		$model=M('brand_apply');
+		$data=$model->select();
+		$this->assign('data',$data);
+		$this->display('Admin/Brand/brandApply');
+	}
+	
+	public function brandConfirm() {
+		if (IS_GET) {
+			if (isset ( $_GET ['id'] )) {
+				$data['status']=1;
+				$model = M ( 'brand_apply' );
+				if($model->where('id='.$_GET['id'])->save($data)){
+					$params = array(
+							'status' => 'success',
+							'info' => '确认成功!',
+							'pageName' => 'brand'
+					);
+					$this->redirect ( 'Brand/brandApply',$params );
+				}else{
+					$params = array(
+							'status' => 'success',
+							'info' => '确认失败!',
+							'pageName' => 'brand'
+					);
+					$this->redirect ( 'Brand/brandApply',$params );
+				}
+			}
+		}
+	}
 }
