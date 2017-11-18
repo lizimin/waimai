@@ -37,11 +37,13 @@
 						<table class="table table-striped table-hover">
 							<thead>
 								<tr>
-									<td width="15%">店铺名字</td>
+									<td width="10%">店铺名字</td>
 									<td width="15%">地址</td>
 									<td width="15%">联系方式</td>
-									<td width="20%">店铺描述</td>
-									<td width="20%">店铺图片</td>
+									<td width="10%">配送费</td>
+									<td width="10%">起送价</td>
+									<td width="15%">店铺描述</td>
+									<td width="10%">店铺图片</td>
 									<td width="25%">操作</td>
 								</tr>
 							</thead>
@@ -51,6 +53,8 @@
 								 	<td><?php echo $v['store_name']; ?></td>
 								 	<td><?php echo $v['address']; ?></td>
 									<td><?php echo $v['contact']; ?></td>
+									<td><?php echo $v['packing_fee']; ?></td>
+									<td><?php echo $v['begin_price']; ?></td>
 									<td><?php echo $v['describe']; ?></td>
 									<td><img style="width: 100px;" class="photo-ctn mg-top" src="<?php echo $v['img']; ?>" alt=""></td>
 								 	<td>
@@ -96,6 +100,7 @@
 							</div>
 								<div class="panel-body">
 												<form class="adminLogin" role="form" enctype="multipart/form-data" action="{:U('Store/storeAdd')}" method="POST">
+												<div class="box-left">
 												  <div class="form-group">
 												    <label for="store_name">店铺名字</label>
 												    <input name="store_name" type="text" class="form-control" id="store_name" placeholder="name" autocomplete="off" required="">
@@ -105,7 +110,18 @@
 												    <label for="address">地址</label>
 												    <input name="address" type="text" class="form-control" id="address" placeholder="address" autocomplete="off" required="">
 												  </div>
-
+												  
+												   <div class="form-group">
+												    <label for="address">配送费</label>
+												    <input name="packing_fee" type="text" class="form-control" id="packing_fee" placeholder="packing_fee" autocomplete="off" required="">
+												  </div>
+												  
+												   <div class="form-group">
+												    <label for="begin_price">起送价</label>
+												    <input name="begin_price" type="text" class="form-control" id="begin_price" placeholder="begin_price" autocomplete="off" required="">
+												  </div>
+													</div>
+													<div class="box-right">
 												  <div class="form-group">
 												    <label for="contact">联系方式</label>
 												    <input name="contact" type="text" class="form-control" id="contact" placeholder="contact" autocomplete="off" required="">
@@ -120,8 +136,7 @@
 												    <label for="describe">描述</label>
 												    <textarea name="describe"  class="form-control" id="describe" placeholder="describe" autocomplete="off" required=""></textarea>
 												  </div>
-
-								
+											</div>
 											<div class="text-center">
 											<button type="submit" class="btn btn-primary btn-submit"><i class="icon-plus-sign-alt"></i> 添加店铺</button>
 											<p class="error-msg red pull-right"></p>
@@ -140,30 +155,44 @@
 							</div>
 								<div class="panel-body">
 												<form class="adminLogin" role="form" enctype="multipart/form-data" action="{:U('Store/storeEdit')}" method="POST">
-												  <div class="form-group">
-												    <label for="store_name">店铺名字</label>
-												    <input name="store_name" type="text" class="form-control" id="store_name" placeholder="name" autocomplete="off" required="">
-												    <input name="store_id" type="hidden" class="form-control" id="store_id" placeholder="name" autocomplete="off" required="">
-												  </div>
-
-												  <div class="form-group">
-												    <label for="address">地址</label>
-												    <input name="address" type="text" class="form-control" id="address" placeholder="address" autocomplete="off" required="">
-												  </div>
-
-												  <div class="form-group">
-												    <label for="contact">联系方式</label>
-												    <input name="contact" type="text" class="form-control" id="contact" placeholder="contact" autocomplete="off" required="">
-												  </div>
-															  
-													<div class="form-group">
-													    <label class="" for="img">图片</label>
-													    <input name="img" type="file" class="form-control" id="img" placeholder="图片" autocomplete="off" required="">
-													 </div>
-													 
-												<div class="form-group">
-												    <label for="describe">描述</label>
-												    <textarea name="describe"  class="form-control" id="describe" placeholder="describe" autocomplete="off" required=""></textarea>
+												<div class='box-left'>
+													  <div class="form-group">
+													    <label for="store_name">店铺名字</label>
+													    <input name="store_name" type="text" class="form-control" id="store_name" placeholder="name" autocomplete="off" required="">
+													    <input name="store_id" type="hidden" class="form-control" id="store_id" placeholder="name" autocomplete="off" required="">
+													  </div>
+	
+													  <div class="form-group">
+													    <label for="address">地址</label>
+													    <input name="address" type="text" class="form-control" id="address" placeholder="address" autocomplete="off" required="">
+													  </div>
+	
+													  <div class="form-group">
+													    <label for="contact">联系方式</label>
+													    <input name="contact" type="text" class="form-control" id="contact" placeholder="contact" autocomplete="off" required="">
+													  </div>
+												
+												  
+													  <div class="form-group">
+													    <label for="address">配送费</label>
+													    <input name="packing_fee" type="text" class="form-control" id="packing_fee" placeholder="packing_fee" autocomplete="off" required="">
+													  </div>
+												</div>  
+												<div class='box-right'>
+													   <div class="form-group">
+													    <label for="begin_price">起送价</label>
+													    <input name="begin_price" type="text" class="form-control" id="begin_price" placeholder="begin_price" autocomplete="off" required="">
+													  </div>
+																  
+														<div class="form-group">
+														    <label class="" for="img">图片</label>
+														    <input name="img" type="file" class="form-control" id="img" placeholder="图片" autocomplete="off" required="">
+														 </div>
+													
+														<div class="form-group">
+													    	<label for="describe">描述</label>
+													    	<textarea name="describe"  class="form-control" id="describe" placeholder="describe" autocomplete="off" required=""></textarea>
+													 	 </div>
 												  </div>
 
 								
@@ -208,6 +237,8 @@
 									    $('.box-edit').find('input').eq(1).val(id)
 										$('.box-edit').find('input').eq(2).val(res.data.address)
 										$('.box-edit').find('input').eq(3).val(res.data.contact)
+										$('.box-edit').find('input').eq(4).val(res.data.packing_fee)
+										$('.box-edit').find('input').eq(5).val(res.data.begin_price)
 										$('.box-edit').find('textarea').eq(0).val(res.data.describe)
 									}
 								})

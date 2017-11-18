@@ -11,7 +11,14 @@ class WechatController extends Controller {
 	private $appid = 'wx203e1116b8467c61';
 	private $secret = 'c6e637dd771534cac44cce81f6c709cd';
 	public function payCallback() {
-		echo "ccvv1234";
+		// echo 'http://'.$_SERVER['HTTP_HOST'].'/weixin.php';
+		// $postXML = file_get_contents("php://input");
+		// file_put_contents('./test.txt','ccvv');
+		// file_put_contents('./test2.txt',$postXML);
+		// exit;
+		/*
+		 * $model=new WechatModel(); $model->setBody('this is a testing'); $model->setTotal('11'); $model->setTrade_no('1233456677788'); $model->setOpenid('opzIB0aRw7Fg2FA9CkBLuBdgnYZ0'); $model->setSign(); $rs=$model->request(); var_dump($model->JSapi($rs['prepay_id'], $rs['nonce_str']));
+		 */
 	}
 	public function getOpenid() {
 		if (IS_POST) {
@@ -95,8 +102,8 @@ class WechatController extends Controller {
 	public function getdish() {
 		if ($_GET ['id']) {
 			$Model = new \Think\Model ();
-			$sql_cate = 'select *from think_category where store_id=' . $_GET ['id'];
-			$sql_dish = 'select s.id as store_id,s.store_name,s.address,s.contact,c.id as category_id,c.category_name,d.id as dish_id,d.dish_name,d.price,d.img,d.discount from think_store s join think_category c on s.id=c.store_id join think_dish d on c.id=d.category_id where s.id=' . $_GET ['id'];
+			$sql_cate = 'select *from think_category where store_id=' . $_GET ['id'].' and is_sale=0';
+			$sql_dish = 'select s.id as store_id,s.store_name,s.address,s.contact,c.id as category_id,c.category_name,c.is_sale as ca_sale,d.id as dish_id,d.dish_name,d.price,d.img,d.discount,d.backup,d.is_sale,d.wrap_fee from think_store s join think_category c on s.id=c.store_id join think_dish d on c.id=d.category_id where s.id=' . $_GET ['id'].' and c.is_sale=0 and d.is_sale=0';
 			$category = $Model->query ( $sql_cate );
 			$dish = $Model->query ( $sql_dish );
 			foreach ( $category as $k => $v ) {
@@ -227,6 +234,7 @@ class WechatController extends Controller {
 				$data = M ( 'order' )->where ( $where )->select ();
 				foreach ( $data as $k => $v ) {
 					$myOrder [$k] ['date'] = $v ['date'];
+					$myOrder [$k] ['orderid'] = $v ['orderid'];
 					$myOrder [$k] ['status'] = $v ['status'];
 					$myOrder [$k] ['dishData'] = json_decode ( $v ['dishdata'] );
 					$myOrder [$k] ['id'] = $v ['id'];
@@ -243,36 +251,6 @@ class WechatController extends Controller {
 						'data' => [ ] 
 				] );
 			}
-		}
-	}
-	public function createOrder() {
-		header ( 'Content-Type:application/json; charset=utf-8' );
-		if (IS_POST) {
-			$model = new WechatModel ();
-			$orderID = "B" . mt_rand ( 10000, 99999 ) . time ();
-			$trade_no = date ( 'Ymdhis' ) . mt_rand ( 11, 99 ) . mt_rand ( 1, 9 );
-			$order = M ( 'order' );
-			if (isset ( $_POST ['address_id'] ) && isset ( $_POST ['weixin_user_id'] ) && isset ( $_POST ['total'] ) && isset ( $_POST ['dishData'] )) {
-				$_POST ['trade_no'] = $trade_no;
-				$_POST ['orderid'] = $orderID;
-				$_POST ['date'] = date ( 'Y-m-d:h:m:s', time () );
-				if ($order_id = $order->add ( $order->create ( $_POST ) )) {
-					echo json_encode ( [ 
-							'code' => 0,
-							'info' => 'successful add',
-							'data' => json_decode ( $_POST ['dishData'] ) 
-					], JSON_UNESCAPED_UNICODE );
-				} else {
-					return $this->ajaxReturn ( [ 
-							'code' => 1,
-							'info' => 'params error',
-							'data' => [ ] 
-					] );
-				}
-			}
-			// $model->setBody ( 'this is a black cat' );
-			// $model->setTrade_no ( $trade_no );
-			// $model->setTotal ( $_POST ['total'] );
 		}
 	}
 	public function brandApply() {
@@ -293,5 +271,127 @@ class WechatController extends Controller {
 			}
 		}
 	}
-
+	// ////////////////////////////////////////////////////////////////////////////////////////////
+	public function createOrder() {
+		header ( 'Content-Type:application/json; charset=utf-8' );
+		if (IS_POST) {
+			$model = new WechatModel ();
+			$orderID = "B" . mt_rand ( 10000, 99999 ) . time ();
+			$trade_no = date ( 'Ymdhis' ) . mt_rand ( 11, 99 ) . mt_rand ( 1, 9 );
+			$order = M ( 'order' );
+			if (isset ( $_POST ['address_id'] ) && isset ( $_POST ['weixin_user_id'] ) && isset ( $_POST ['total'] ) && isset ( $_POST ['dishData'] )) {
+				$openid = M ( 'weixin_user' )->where ( 'id=' . $_POST ['weixin_user_id'] )->select ()[0]['openid'];
+				$_POST ['trade_no'] = $trade_no;
+				$_POST ['orderid'] = $orderID;
+				$_POST ['date'] = date ( 'Y-m-d:h:m:s', time () );
+				if ($order_id = $order->add ( $order->create ( $_POST ) )) {
+					$model->setBody ( 'this is a testing' );
+					//$model->setTotal ( ( int ) $_POST ['total'] );
+					$model->setTotal ( 1 );
+					$model->setTrade_no ( $trade_no );
+					$model->setOpenid ( $openid );
+					$model->setSign ();
+					$rs = $model->request ();
+					if ($rs ['prepay_id']) {
+						$sdkData = $model->JSapi ( $rs ['prepay_id'], $rs ['nonce_str'] );
+						echo json_encode ( [ 
+								'code' => 0,
+								'info' => 'successful add',
+								'sdkData' => $sdkData,
+								'orderid'=>$orderID,
+								'data' => json_decode ( $_POST ['dishData'] ) 
+						], JSON_UNESCAPED_UNICODE );
+					} else {
+						return $this->ajaxReturn ( [ 
+								'code' => 1,
+								'info' => 'prepay_id error',
+								'data' => [ ] 
+						] );
+					}
+				} else {
+					return $this->ajaxReturn ( [ 
+							'code' => 1,
+							'info' => 'params error',
+							'data' => [ ] 
+					] );
+				}
+			}
+		}
+	}
+	// ///////////////////////////////////////////////
+	public function confirmOrder() {
+		if (IS_POST) {
+			$orderid=$_POST['orderid'];
+			if($orderid){
+				$model=M('order');
+				if($model->where("orderid='".$orderid."'")->save(['status'=>1])){
+					return $this->ajaxReturn ( [
+							'code' => 0,
+							'info' => 'order success',
+							'data' => [ ]
+							] );
+				}else{
+					throw new Exception('error from order',1);
+				}
+			}
+		}
+	}
+	////////////////////////////////////////////
+	
+	public function pay(){
+		if(IS_POST){
+			if(isset($_POST['orderid'])&&isset($_POST['weixin_user_id'])){
+				$model = new WechatModel ();
+				$order=M('order')->where('orderid="'.$_POST['orderid'].'" and weixin_user_id='.$_POST['weixin_user_id'])->select()[0];
+				if($order&&$order['status']==0){
+					$openid = M ( 'weixin_user' )->where ( 'id=' . $_POST ['weixin_user_id'] )->select ()[0]['openid'];
+					$trade_no=$order['trade_no'];
+					$orderid=$order['orderid'];
+					$model->setBody ( 'this is a testing' );
+					//$model->setTotal ( ( int ) $_POST ['total'] );
+					$model->setTotal ( 1 );
+					$model->setTrade_no ( $trade_no );
+					$model->setOpenid ( $openid );
+					$model->setSign ();
+					$rs = $model->request ();
+					if ($rs ['prepay_id']) {
+						$sdkData = $model->JSapi ( $rs ['prepay_id'], $rs ['nonce_str'] );
+						echo json_encode ( [
+								'code' => 0,
+								'info' => 'successful add',
+								'sdkData' => $sdkData,
+								'orderid'=>$orderid,
+								'data' => json_decode ( $_POST ['dishData'] )
+								], JSON_UNESCAPED_UNICODE );
+					} else {
+						return $this->ajaxReturn ( [
+								'code' => 1,
+								'info' => 'prepay_id error',
+								'data' => [ ]
+								] );
+					}
+				}else{
+					throw new Exception('order error',1);
+				}
+			}
+		}
+	}
+	//////////////////////////退款//////////////////////
+	public function refound(){
+		if (IS_POST) {
+			$orderid=$_POST['orderid'];
+			if($orderid){
+				$model=M('order');
+				if($model->where("orderid='".$orderid."'")->save(['status'=>3])){
+					return $this->ajaxReturn ( [
+							'code' => 0,
+							'info' => 'order success',
+							'data' => [ ]
+							] );
+				}else{
+					throw new Exception('error from order',1);
+				}
+			}
+		}
+	}
 }

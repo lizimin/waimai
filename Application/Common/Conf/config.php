@@ -3,7 +3,11 @@ return array(
 	//'配置项'=>'配置值'
 		/* 数据库设置 */
 		'DB_TYPE'               =>  'mysql',     // 数据库类型
-		'DB_HOST'               =>  'www.ddkj.com', // 服务器地址
+		//'DB_HOST'               =>  'bdm247065540.my3w.com', // 服务器地址
+		//'DB_NAME'               =>  'bdm247065540_db',          // 数据库名
+		//'DB_USER'               =>  'bdm247065540',      // 用户名
+		//'DB_PWD'                =>  'qwe123qwe',          // 密码
+		'DB_HOST'               =>  '127.0.0.1', // 服务器地址
 		'DB_NAME'               =>  'dinling',          // 数据库名
 		'DB_USER'               =>  'root',      // 用户名
 		'DB_PWD'                =>  '007000',          // 密码

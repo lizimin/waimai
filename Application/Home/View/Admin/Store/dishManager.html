@@ -1,7 +1,7 @@
 <html>
 	<head>
 		<title>点度后台管理</title>
-		<include file="StoreCommon:head"/>
+		<include file="storeCommon:head"/>
 		<style>
 			table tbody tr { transition: all 0.3s ease-in-out; }
 			table tbody tr td span { display: inline-block; padding: 0 3px; }
@@ -18,10 +18,10 @@
 	</head>
 	<body>
 		<div class="wrapper admin">
-			<include file="StoreCommon:alert"/>
-			<include file="StoreCommon:adminHeader"/>
+			<include file="storeCommon:alert"/>
+			<include file="storeCommon:adminHeader"/>
 			<div class="middle-content">
-				<include file="StoreCommon:adminSidebar"/>
+				<include file="storeCommon:adminSidebar"/>
 				<div class="content pull-right">
 					<div class="account-manage">
 						<h1 class="headline text-center bold"><?php echo $category['category_name']?></h1>
@@ -38,13 +38,14 @@
 							<thead>
 								<tr>
 									<td width="15%">名称</td>
-									<td width="15%">图片</td>
+									<td width="10%">图片</td>
 									<td width="10%">价格</td>
 									<td width="10%">折扣</td>
 									<td width="10%">数量</td>
+									<td width="10%">餐盒费</td>
 									<td width="15%">备注</td>
 									<td width="10%">上架</td>
-									<td width="30%">操作</td>
+									<td width="20%">操作</td>
 								</tr>
 							</thead>
 							<tbody>
@@ -55,6 +56,7 @@
 									<td><?php echo $v['price']; ?></td>
 									<td><?php echo $v['discount']; ?></td>
 									<td><?php echo $v['count']; ?></td>
+									<td><?php echo $v['wrap_fee']; ?></td>
 									<td><?php echo $v['backup']; ?></td>
 									<td><?php if($v['is_sale']==0){ echo "上架";}else{echo "下架";}; ?></td>			
 								 	<td>
@@ -136,7 +138,12 @@
 												   <input name="is_sale" checked="checked" type="radio" value="0" />上架&nbsp;&nbsp;
 												    <input name="is_sale"  type="radio" value="1" />下架
 										</div>
-															
+											
+										 <div class="form-group">
+										    <label for="discount">餐盒费</label>
+										    <input name="wrap_fee" type="text" class="form-control" id="wrap_fee" placeholder="餐盒费" autocomplete="off" required="">
+										  </div>
+										  				
 										  <div class="form-group">
 										    <label for="backup">备注</label>
 										    <textarea name="backup"  class="form-control" id="backup" placeholder="备注" autocomplete="off" ></textarea>
@@ -193,7 +200,12 @@
 												   <input name="is_sale"  type="radio" value="0" />上架&nbsp;&nbsp;
 												    <input name="is_sale"  type="radio" value="1" />下架
 										</div>
-															
+											
+										 <div class="form-group">
+										    <label for="discount">餐盒费</label>
+										    <input name="wrap_fee" type="text" class="form-control" id="wrap_fee" placeholder="餐盒费" autocomplete="off" required="">
+										  </div>
+										  				
 										  <div class="form-group">
 										    <label for="backup">备注</label>
 										    <textarea name="backup"  class="form-control" id="backup" placeholder="备注" autocomplete="off" ></textarea>
@@ -259,6 +271,7 @@
 										$('.box-3').find('input').eq(3).val(res.data.price)	
 										$('.box-3').find('input').eq(5).val(res.data.count)
 										$('.box-3').find('input').eq(6).val(res.data.discount)
+										$('.box-3').find('input').eq(9).val(res.data.wrap_fee)
 										$('.box-3').find('textarea').eq(0).val(res.data.backup)
 										if(res.data.is_sale==1){
 											$('.box-3').find('input').eq(7).removeAttr('checked');

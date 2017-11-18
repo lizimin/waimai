@@ -6,26 +6,25 @@ use Think\Exception;
 use Think\Model;
 
 class WechatModel extends Model {
-	private $appid='wxbd656d12592b4e0c';
-	private $mch_id='1487467822';
-	private $url='https://api.mch.weixin.qq.com/pay/unifiedorder';
-	private $payKey='dfh344df98f6368sd5h8d34h8d34dr87';
+	const  URL='https://api.mch.weixin.qq.com/pay/unifiedorder';
+	private $appid='wx203e1116b8467c61';
+	private $mch_id='1492207522';
+	private $payKey='f48hf5nd54h5r8ty44590fnyt823g8fg';
 	private $values=[];
 	public function __construct(){
 		$this->values['appid']=$this->appid;
 		$this->values['mch_id']=$this->mch_id;
 		$this->values['nonce_str']=$this->getNonce_str();
-		$this->values['spbill_create_id']='127.0.0.1';
-		$this->values['trade_type']='JSPAI';
+		$this->values['spbill_create_ip']='127.0.0.1';
+		$this->values['trade_type']='JSAPI';
 		$this->values['notify_url']='http://'.$_SERVER['HTTP_HOST'].'/weixin.php';
 	
 	}
 
 	public function request(){
 		$requestPayXML=$this->ToXml();
-		$rs = $this->postXmlCurl($this->ToXml(),$this->url);
+		$rs = $this->postXmlCurl($this->ToXml());
 		$result = $this->FromXml($rs);
-	
 		if (isset($result['return_code']) && $result['return_code'] == 'SUCCESS') {
 			return $result;
 		}else{
@@ -64,11 +63,15 @@ class WechatModel extends Model {
 	}
 	//生成价格
 	public function setTotal($value){
-		$this->values['total']=$value;
+		$this->values['total_fee']=$value;
 	}
 	//生成BODY
 	public function setBody($value){
 		$this->values['body']=$value;
+	}
+	//生成Openid
+	public function setOpenid($value){
+		$this->values['openid']=$value;
 	}
 	//生成随机字符串;
 	public  function getNonce_str($length = 32){
@@ -108,6 +111,39 @@ class WechatModel extends Model {
 		
 		$buff = trim($buff, "&");
 		return $buff;
+	}
+	//返回SDK签名;
+	public function JSapi($prepay_id, $nonceStr){
+		$appid=$this->appid;
+		$timeStamp=time();
+		$key=$this->payKey;
+		$str="appId={$appid}&nonceStr={$nonceStr}&package=prepay_id={$prepay_id}&signType=MD5&timeStamp={$timeStamp}&key={$key}";
+		$paySign = strtoupper(md5($str));
+	    return ['nonceStr'=>$nonceStr,'timeStamp'=>$timeStamp,'paySign'=>$paySign,'package'=>'prepay_id='.$prepay_id];
+	    
+	}
+	
+	//发送数据
+	private static function postXmlCurl($xml)
+	{
+		$url = self::URL;
+		$curl = curl_init();
+		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($curl, CURLOPT_TIMEOUT, 500);
+		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+		curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+		curl_setopt($curl,CURLOPT_URL,$url);
+		//curl_setopt($ch,CURLOPT_HEADER,false);
+		curl_setopt($curl,CURLOPT_POST,true);
+		curl_setopt($curl,CURLOPT_POSTFIELDS,$xml);
+		$result=curl_exec($curl);
+		if($result){
+			curl_close($curl);
+			return $result;
+		}else{
+			curl_close($curl);
+			return false;
+		}
 	}
 	
 	

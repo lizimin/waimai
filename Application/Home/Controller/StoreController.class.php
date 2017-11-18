@@ -21,6 +21,8 @@ class StoreController extends AdminController {
 			$storeData ['address'] = $_POST ['address'];
 			$storeData ['contact'] = $_POST ['address'];
 			$storeData ['describe'] = $_POST ['describe'];
+			$storeData ['packing_fee'] = $_POST ['packing_fee'];
+			$storeData ['begin_price'] = $_POST ['begin_price'];
 			if (session ( 'user_id' ) == null || session ( 'brand_id' ) == null) {
 				$this->error ( 'login failed', '/Home/Login/pageLogin' );
 			}

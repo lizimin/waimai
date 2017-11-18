@@ -29,13 +29,13 @@
 									<p><a data-status="0" class="btn btn-tools btn-search-status" href="#">未付钱<span class="badge message-new-all bg-yellow"><?php echo $pending; ?></span></a></p>
 								</li>
 								<li>
-									<p><a data-status="1" class="btn btn-tools btn-search-status" href="#">已付钱</a></p>
+									<p><a data-status="1" class="btn btn-tools btn-search-status" href="#">配送中</a></p>
 								</li>
 								<li>
-									<p><a data-status="2" class="btn btn-tools btn-search-status" href="#">退款中 <span class="badge message-new-all bg-yellow"><?php echo $refunding; ?></span></a></p>
+									<p><a data-status="2" class="btn btn-tools btn-search-status" href="#">已完成 <span class="badge message-new-all bg-yellow"><?php echo $refunding; ?></span></a></p>
 								</li>
 								<li>
-									<p><a data-status="3" class="btn btn-tools btn-search-status" href="#">已退款</a></p>
+									<p><a data-status="3" class="btn btn-tools btn-search-status" href="#">退款</a></p>
 								</li>
 							</ul>
 						</div>
@@ -70,10 +70,10 @@
 										echo "已经付钱";
                                     }
 								    if($v['status']==2){
- 										echo "退款中";
+ 										echo "已完成";
 									}
 									if($v['status']==3){
-										echo "已经退款";
+										echo "退款";
 									}
 
 									?></td>
@@ -198,39 +198,39 @@
 										'<tr data-id="'+ val.id +'" class="order-view ">' +
 											'<td>'+ val.orderid +'</td>' +
 										 	'<td>'+ val.total +'</td>' +
-										 	'<td>'+ val.date +'<p>-------------</p>'+ val.check_out +'</td>' +
+										 	'<td>'+ val.date +'</td>' +
 										 	'<td>'+ val.store_name +'</td>' +
 										 	'<td>'+ val.name +'</td>' +
 											'<td>' + val.phone +'</td>' +
 											'<td>未付钱</td>' +
 										 	'<td>' +
-									 			'<?php if(session('level') == 10): ?><span><a title="删除" data-id="'+ val.id +'" data-tag="'+ val.order_number +'" class="jagoFancybox-delete-order" href="#"><i class="icon-trash"></i></a></span><?php endif ?>'+
-									 			refund +
+									 			//'<span><a title="删除" data-id="'+ val.id +'" data-tag="'+ val.order_number +'" class="jagoFancybox-delete-order" href="#"><i class="icon-trash"></i></a></span>'+
+									 			//refund +
 										 	'</td>' +
 									 	'</tr>'
 									);
 								}
 								else if (val.status == '1') {
-									val.status = '已付钱';
+									val.status = '配送中';
 									refund = '';
 									$('table tbody').append(
 										'<tr data-id="'+ val.id +'" class="order-view ">' +
 										'<td>'+ val.orderid +'</td>' +
 									 	'<td>'+ val.total +'</td>' +
-									 	'<td>'+ val.date +'<p>-------------</p>'+ val.check_out +'</td>' +
+									 	'<td>'+ val.date +'</td>' +
 									 	'<td>'+ val.store_name +'</td>' +
 									 	'<td>'+ val.name +'</td>' +
 										'<td>' + val.phone +'</td>' +
-										'<td>已付钱</td>' +
+										'<td>配送中</td>' +
 									 	'<td>' +
-									 			'<?php if(session('level') == 10): ?><span><a title="删除" data-id="'+ val.id +'" data-tag="'+ val.order_number +'" class="jagoFancybox-delete-order" href="#"><i class="icon-trash"></i></a></span><?php endif ?>'+
+									 			'<span><a title="确认" data-id="'+ val.id +'" data-tag="'+ val.order_number +'" class="jagoFancybox-confirm" href="#"><i class="icon-ok"></i></a></span>'+
 									 			refund +
 										 	'</td>' +
 									 	'</tr>'
 									);
 								}
 								else if (val.status == '2') {
-									val.status = '退款中';
+									val.status = '已完成';
 									refund = '<span><a title="确认退款" data-id="'+ val.id +'" data-tag="'+ val.order_number +'" class="jagoFancybox-order-agree-refund" href="#"><i class="icon-check"></i></a></span>';
 									$('table tbody').append(
 										'<tr data-id="'+ val.id +'" class="order-view ">' +
@@ -240,16 +240,16 @@
 									 	'<td>'+ val.store_name +'</td>' +
 									 	'<td>'+ val.name +'</td>' +
 										'<td>' + val.phone +'</td>' +
-										'<td>退款中</td>' +
+										'<td>已完成</td>' +
 									 	'<td>' +
-									 			'<?php if(session('level') == 10): ?><span><a title="删除" data-id="'+ val.id +'" data-tag="'+ val.order_number +'" class="jagoFancybox-delete-order" href="#"><i class="icon-trash"></i></a></span><?php endif ?>'+
+									 			'<span><a title="删除" data-id="'+ val.id +'" data-tag="'+ val.order_number +'" class="jagoFancybox-delete-order" href="#"><i class="icon-trash"></i></a></span>'+
 									 			refund +
 										 	'</td>' +
 									 	'</tr>'
 									);
 								}
 								else if (val.status == '3') {
-									val.status = '已退款';
+									val.status = '退款';
 									refund = '';
 									$('table tbody').append(
 										'<tr data-id="'+ val.id +'" class="order-view ">' +
@@ -259,9 +259,9 @@
 									 	'<td>'+ val.store_name +'</td>' +
 									 	'<td>'+ val.name +'</td>' +
 										'<td>' + val.phone +'</td>' +
-										'<td>已经退款</td>' +
+										'<td>退款</td>' +
 									 	'<td>' +
-									 			'<?php if(session('level') == 10): ?><span><a title="删除" data-id="'+ val.id +'" data-tag="'+ val.order_number +'" class="jagoFancybox-delete-order" href="#"><i class="icon-trash"></i></a></span><?php endif ?>'+
+									 			'<span><a title="确认退款" data-id="'+ val.id +'" data-tag="'+ val.order_number +'" class="jagoFancybox-refoundConfirm" href="#"><i class="icon-signout"></i></a></span>'+
 									 			refund +
 										 	'</td>' +
 									 	'</tr>'
