@@ -119,13 +119,13 @@
 							<div class="jagoFancybox-head">
 								<h4 class="title">确认退款? <a href="#"><i class="icon-remove-sign pull-right jagoFancybox-cancel"></i></a></h4>
 							</div>
-							<form action="{:U('Admin/orderStatusUpdate')}">
+							<form action="{:U('Order/refoundConfirm')}">
 								<div class="jagoFancybox-body">
 									<p class="jagoFancybox-headline">确认退款给该用户?</p>
 									<p class="jagoFancybox-content bold"></p>
 									<div class="none">
-										<input type="text" name="deleteId">
-										<input type="text" name="status" value="3">
+										<input type="text" name="id">
+										<input type="text" name="status" value="2">
 									</div>
 								</div>
 								<div class="jagoFancybox-btn">
@@ -146,7 +146,7 @@
 									<p class="jagoFancybox-headline">确认该用户入住?</p>
 									<p class="jagoFancybox-content bold"></p>
 									<div class="none">
-										<input type="text" name="deleteId">
+										<input type="text" name="id">
 										<input type="text" name="status" value="1">
 									</div>
 								</div>
@@ -223,7 +223,7 @@
 										'<td>' + val.phone +'</td>' +
 										'<td>配送中</td>' +
 									 	'<td>' +
-									 			'<span><a title="确认" data-id="'+ val.id +'" data-tag="'+ val.order_number +'" class="jagoFancybox-confirm" href="#"><i class="icon-ok"></i></a></span>'+
+									 			'<span><a href="'+"<?php echo U('Order/orderConfirm')?>"+'/id/'+val.id+'" title="确认" data-id="'+ val.id +'" data-tag="'+ val.orderid +'" class="jagoFancybox-confirm" href="#"><i class="icon-ok"></i></a></span>'+
 									 			refund +
 										 	'</td>' +
 									 	'</tr>'
@@ -236,14 +236,14 @@
 										'<tr data-id="'+ val.id +'" class="order-view ">' +
 										'<td>'+ val.orderid +'</td>' +
 									 	'<td>'+ val.total +'</td>' +
-									 	'<td>'+ val.date +'<p>-------------</p>'+ val.check_out +'</td>' +
+									 	'<td>'+ val.date +'</td>' +
 									 	'<td>'+ val.store_name +'</td>' +
 									 	'<td>'+ val.name +'</td>' +
 										'<td>' + val.phone +'</td>' +
 										'<td>已完成</td>' +
 									 	'<td>' +
-									 			'<span><a title="删除" data-id="'+ val.id +'" data-tag="'+ val.order_number +'" class="jagoFancybox-delete-order" href="#"><i class="icon-trash"></i></a></span>'+
-									 			refund +
+									 			//'<span><a title="删除" data-id="'+ val.id +'" data-tag="'+ val.order_number +'" class="jagoFancybox-delete-order" href="#"><i class="icon-trash"></i></a></span>'+
+									 			//refund +
 										 	'</td>' +
 									 	'</tr>'
 									);
@@ -255,23 +255,18 @@
 										'<tr data-id="'+ val.id +'" class="order-view ">' +
 										'<td>'+ val.orderid +'</td>' +
 									 	'<td>'+ val.total +'</td>' +
-									 	'<td>'+ val.date +'<p>-------------</p>'+ val.check_out +'</td>' +
+									 	'<td>'+ val.date +'</td>' +
 									 	'<td>'+ val.store_name +'</td>' +
 									 	'<td>'+ val.name +'</td>' +
 										'<td>' + val.phone +'</td>' +
 										'<td>退款</td>' +
 									 	'<td>' +
-									 			'<span><a title="确认退款" data-id="'+ val.id +'" data-tag="'+ val.order_number +'" class="jagoFancybox-refoundConfirm" href="#"><i class="icon-signout"></i></a></span>'+
+									 			'<span><a  title="确认退款" data-id="'+ val.id +'" data-tag="'+ val.phone +'" class="jagoFancybox-refoundConfirm" href="#"><i class="icon-signout"></i></a></span>'+
 									 			refund +
 										 	'</td>' +
 									 	'</tr>'
 									);
 								}
-								// if (val.view == 0) {
-								// 	val.view = 'no-view';
-								// 	refund = '';
-								// }
-
 
 							});
 						}
@@ -309,14 +304,14 @@
 					return false;
 				});
 
-				$('table').on('click', '.jagoFancybox-order-agree-refund', function() {
+				$('table').on('click', '.jagoFancybox-refoundConfirm', function() {
 					var id = $(this).data('id');
 					var content = $(this).data('tag');
 
 					$('.jagoFancybox').addClass('active');
 					$('.jagoFancybox .box-2').addClass('active');
 					
-					$('.box-2 .jagoFancybox-confirm-ctn input[name="deleteId"]').val(id);
+					$('.box-2 .jagoFancybox-confirm-ctn input[name="id"]').val(id);
 					$('.box-2 .jagoFancybox-confirm-ctn .jagoFancybox-content').html('');
 					$('.box-2 .jagoFancybox-confirm-ctn .jagoFancybox-content').append(content);
 					return false;

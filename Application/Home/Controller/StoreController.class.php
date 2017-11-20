@@ -107,6 +107,16 @@ class StoreController extends AdminController {
 	public function storeDelete() {
 		if (IS_GET) {
 			$model = M ( 'store' );
+			$has=M('category')->where('store_id='.$_GET['id'])->select();
+			if($has){
+				$params = array (
+						'status' => 'success',
+						'info' => '请先删除分类!',
+						'pageName' => 'store'
+				);
+				$this->redirect ( 'Store/toStore', $params );
+				exit;
+			}
 			if ($model->where ( "id=" . $_GET ['id'] )->delete ()) {
 				$params = array (
 						'status' => 'success',
@@ -227,7 +237,7 @@ class StoreController extends AdminController {
 			if($has){
 				$params = array (
 						'status' => 'success',
-						'info' => '请先删除分类',
+						'info' => '请先删除菜品',
 						'pageName' => 'category',
 						'id' => $_GET ['store_id']
 				);
@@ -359,8 +369,7 @@ class StoreController extends AdminController {
 								'info' => '菜品删除成功!',
 								'pageName' => 'category',
 								'category_id' => $_GET ['category_id']
-						);
-						$this->redirect ( 'Store/dishManager', $params );
+						);						
 				$this->redirect ( 'Store/dishManager', $params );
 			}else{
 				$params = array (
@@ -369,8 +378,7 @@ class StoreController extends AdminController {
 								'pageName' => 'category',
 								'category_id' => $_GET ['category_id']
 						);
-						$this->redirect ( 'Store/dishManager', $params );
-				$this->redirect ( 'Store/dishManager', $params );
+						$this->redirect ( 'Store/dishManager', $params );				
 			}
 		}
 	}

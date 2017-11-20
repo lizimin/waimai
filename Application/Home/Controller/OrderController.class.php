@@ -54,4 +54,41 @@ class OrderController extends AdminController {
 		}
 
 	}
+	
+	public function orderConfirm(){
+		if(IS_GET){
+			$id=$_GET['id'];
+			$model=M('order');
+			if($model->where("id=".$id)->save(['status'=>2])){
+				$params = array (
+						'status' => 'success',
+						'info' => '确认成功!',
+						'pageName' => 'order',
+					
+				);
+				$this->redirect ( 'Order/orderList', $params );
+			}else{
+				echo $model->getError();
+			}
+		}
+		
+	}
+	
+	public function refoundConfirm(){
+		if(IS_GET){
+			$id=$_GET['id'];
+			$model=M('order');
+			if($model->where("id=".$id)->save(['status'=>2])){
+				$params = array (
+						'status' => 'success',
+						'info' => '确认退款成功',
+						'pageName' => 'order',
+							
+				);
+				$this->redirect ( 'Order/orderList', $params );
+			}else{
+				echo $model->getError();
+			}
+		}
+	}
 }
