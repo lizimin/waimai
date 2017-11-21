@@ -102,8 +102,8 @@ class WechatController extends Controller {
 	public function getdish() {
 		if ($_GET ['id']) {
 			$Model = new \Think\Model ();
-			$sql_cate = 'select *from think_category where store_id=' . $_GET ['id'].' and is_sale=0';
-			$sql_dish = 'select s.id as store_id,s.store_name,s.address,s.contact,c.id as category_id,c.category_name,c.is_sale as ca_sale,d.id as dish_id,d.dish_name,d.price,d.img,d.discount,d.backup,d.is_sale,d.wrap_fee from think_store s join think_category c on s.id=c.store_id join think_dish d on c.id=d.category_id where s.id=' . $_GET ['id'].' and c.is_sale=0 and d.is_sale=0';
+			$sql_cate = 'select *from think_category where store_id=' . $_GET ['id'] . ' and is_sale=0';
+			$sql_dish = 'select s.id as store_id,s.store_name,s.address,s.contact,c.id as category_id,c.category_name,c.is_sale as ca_sale,d.id as dish_id,d.dish_name,d.price,d.img,d.discount,d.backup,d.is_sale,d.wrap_fee from think_store s join think_category c on s.id=c.store_id join think_dish d on c.id=d.category_id where s.id=' . $_GET ['id'] . ' and c.is_sale=0 and d.is_sale=0';
 			$category = $Model->query ( $sql_cate );
 			$dish = $Model->query ( $sql_dish );
 			foreach ( $category as $k => $v ) {
@@ -283,11 +283,12 @@ class WechatController extends Controller {
 				$openid = M ( 'weixin_user' )->where ( 'id=' . $_POST ['weixin_user_id'] )->select ()[0]['openid'];
 				$_POST ['trade_no'] = $trade_no;
 				$_POST ['orderid'] = $orderID;
-				$_POST ['date'] = date ( 'Y-m-d:h:m:s', time () );
+				$_POST ['date'] = date ( 'Y-m-d:H:m:s', time () );
+				$_POST ['total'] = $_POST ['total'] * 100;
 				if ($order_id = $order->add ( $order->create ( $_POST ) )) {
 					$model->setBody ( 'this is a testing' );
-					//$model->setTotal ( ( int ) $_POST ['total'] );
-					$model->setTotal ( 1 );
+					$model->setTotal ( $_POST ['total'] );
+					// $model->setTotal ( 1 );
 					$model->setTrade_no ( $trade_no );
 					$model->setOpenid ( $openid );
 					$model->setSign ();
@@ -298,7 +299,7 @@ class WechatController extends Controller {
 								'code' => 0,
 								'info' => 'successful add',
 								'sdkData' => $sdkData,
-								'orderid'=>$orderID,
+								'orderid' => $orderID,
 								'data' => json_decode ( $_POST ['dishData'] ) 
 						], JSON_UNESCAPED_UNICODE );
 					} else {
@@ -321,75 +322,79 @@ class WechatController extends Controller {
 	// ///////////////////////////////////////////////
 	public function confirmOrder() {
 		if (IS_POST) {
-			$orderid=$_POST['orderid'];
-			if($orderid){
-				$model=M('order');
-				if($model->where("orderid='".$orderid."'")->save(['status'=>1])){
-					return $this->ajaxReturn ( [
+			$orderid = $_POST ['orderid'];
+			$weixin_user_id = $_POST ['weixin_user_id'];
+			if ($orderid) {
+				$model = M ( 'order' );
+				if ($model->where ( "orderid='" . $orderid . "' and weixin_user_id=" . $weixin_user_id )->save ( [ 
+						'status' => 1 
+				] )) {
+					return $this->ajaxReturn ( [ 
 							'code' => 0,
 							'info' => 'order success',
-							'data' => [ ]
-							] );
-				}else{
-					throw new Exception('error from order',1);
+							'data' => [ ] 
+					] );
+				} else {
+					throw new Exception ( 'error from order', 1 );
 				}
 			}
 		}
 	}
-	////////////////////////////////////////////
-	
-	public function pay(){
-		if(IS_POST){
-			if(isset($_POST['orderid'])&&isset($_POST['weixin_user_id'])){
+	// //////////////////////////////////////////
+	public function pay() {
+		if (IS_POST) {
+			if (isset ( $_POST ['orderid'] ) && isset ( $_POST ['weixin_user_id'] )) {
 				$model = new WechatModel ();
-				$order=M('order')->where('orderid="'.$_POST['orderid'].'" and weixin_user_id='.$_POST['weixin_user_id'])->select()[0];
-				if($order&&$order['status']==0){
+				$order = M ( 'order' )->where ( 'orderid="' . $_POST ['orderid'] . '" and weixin_user_id=' . $_POST ['weixin_user_id'] )->select ()[0];
+				if ($order && $order ['status'] == 0) {
 					$openid = M ( 'weixin_user' )->where ( 'id=' . $_POST ['weixin_user_id'] )->select ()[0]['openid'];
-					$trade_no=$order['trade_no'];
-					$orderid=$order['orderid'];
+					$trade_no = $order ['trade_no'];
+					$orderid = $order ['orderid'];
 					$model->setBody ( 'this is a testing' );
-					//$model->setTotal ( ( int ) $_POST ['total'] );
-					$model->setTotal ( 1 );
+					$model->setTotal ( ( int ) $order ['total'] );
+					// $model->setTotal ( 1 );
 					$model->setTrade_no ( $trade_no );
 					$model->setOpenid ( $openid );
 					$model->setSign ();
 					$rs = $model->request ();
 					if ($rs ['prepay_id']) {
 						$sdkData = $model->JSapi ( $rs ['prepay_id'], $rs ['nonce_str'] );
-						echo json_encode ( [
+						echo json_encode ( [ 
 								'code' => 0,
 								'info' => 'successful add',
 								'sdkData' => $sdkData,
-								'orderid'=>$orderid,
-								'data' => json_decode ( $_POST ['dishData'] )
-								], JSON_UNESCAPED_UNICODE );
+								'orderid' => $orderid,
+								'data' => json_decode ( $_POST ['dishData'] ) 
+						], JSON_UNESCAPED_UNICODE );
 					} else {
-						return $this->ajaxReturn ( [
+						return $this->ajaxReturn ( [ 
 								'code' => 1,
 								'info' => 'prepay_id error',
-								'data' => [ ]
-								] );
+								'data' => [ ] 
+						] );
 					}
-				}else{
-					throw new Exception('order error',1);
+				} else {
+					throw new Exception ( 'order error', 1 );
 				}
 			}
 		}
 	}
-	//////////////////////////退款//////////////////////
-	public function refound(){
+	// ////////////////////////退款//////////////////////
+	public function refound() {
 		if (IS_POST) {
-			$orderid=$_POST['orderid'];
-			if($orderid){
-				$model=M('order');
-				if($model->where("orderid='".$orderid."'")->save(['status'=>3])){
-					return $this->ajaxReturn ( [
+			$orderid = $_POST ['orderid'];
+			if ($orderid) {
+				$model = M ( 'order' );
+				if ($model->where ( "orderid='" . $orderid . "'" )->save ( [ 
+						'status' => 3 
+				] )) {
+					return $this->ajaxReturn ( [ 
 							'code' => 0,
 							'info' => 'order success',
-							'data' => [ ]
-							] );
-				}else{
-					throw new Exception('error from order',1);
+							'data' => [ ] 
+					] );
+				} else {
+					throw new Exception ( 'error from order', 1 );
 				}
 			}
 		}

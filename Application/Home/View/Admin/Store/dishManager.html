@@ -38,13 +38,11 @@
 							<thead>
 								<tr>
 									<td width="15%">名称</td>
-									<td width="10%">图片</td>
-									<td width="10%">价格</td>
-									<td width="10%">折扣</td>
-									<td width="10%">数量</td>
-									<td width="10%">餐盒费</td>
+									<td width="15%">图片</td>
+									<td width="15%">价格</td>
+									<td width="15%">餐盒费</td>
 									<td width="15%">备注</td>
-									<td width="10%">上架</td>
+									<td width="15%">上架</td>
 									<td width="20%">操作</td>
 								</tr>
 							</thead>
@@ -53,10 +51,8 @@
 								 <tr>
 								 	<td><?php echo $v['dish_name']; ?></td>
 									<td><img style="width: 100px;" class="photo-ctn mg-top" src="<?php echo $v['img']; ?>" alt=""></td>
-									<td><?php echo $v['price']; ?></td>
-									<td><?php echo $v['discount']; ?></td>
-									<td><?php echo $v['count']; ?></td>
-									<td><?php echo $v['wrap_fee']; ?></td>
+									<td>￥<?php echo $v['price']/100; ?></td>
+									<td>￥<?php echo $v['wrap_fee']; ?></td>
 									<td><?php echo $v['backup']; ?></td>
 									<td><?php if($v['is_sale']==0){ echo "上架";}else{echo "下架";}; ?></td>			
 								 	<td>
@@ -120,29 +116,30 @@
 										    <label class="" for="img">图片</label>
 										    <input name="img" type="file" class="form-control" id="img" placeholder="图片" autocomplete="off" required="">
 										  </div>
-										   <div class="form-group">
+										   <!--<div class="form-group">
 										    <label for="count">数量</label>
 										    <input name="count" type="text" class="form-control" id="count" placeholder="数量" autocomplete="off" required="">
-										  </div>
+										  </div>-->
 								
 								
 									</div>
 
 									<div class="box-right">
-									   <div class="form-group">
+									   	<!--<div class="form-group">
 										    <label for="discount">折扣</label>
 										    <input name="discount" type="text" class="form-control" id="discount" placeholder="折扣" autocomplete="off" required="">
-										  </div>
-										<div class="form-group">
-												      <label for="is_sale">是否上架</label>
-												   <input name="is_sale" checked="checked" type="radio" value="0" />上架&nbsp;&nbsp;
-												    <input name="is_sale"  type="radio" value="1" />下架
-										</div>
-											
+										  </div>-->
+									
 										 <div class="form-group">
 										    <label for="discount">餐盒费</label>
 										    <input name="wrap_fee" type="text" class="form-control" id="wrap_fee" placeholder="餐盒费" autocomplete="off" required="">
 										  </div>
+										  
+										<div class="form-group">
+												      <label for="is_sale">是否上架</label>
+												   <input name="is_sale"  type="radio" value="0" />上架&nbsp;&nbsp;
+												    <input name="is_sale"  type="radio" value="1" />下架
+										</div>
 										  				
 										  <div class="form-group">
 										    <label for="backup">备注</label>
@@ -183,28 +180,30 @@
 										    <label class="" for="img">图片</label>
 										    <input name="img" type="file" class="form-control" id="img" placeholder="图片" autocomplete="off" required="">
 										  </div>
-										   <div class="form-group">
+										   <!--<div class="form-group">
 										    <label for="count">数量</label>
 										    <input name="count" type="text" class="form-control" id="count" placeholder="数量" autocomplete="off" required="">
-										  </div>
+										  </div> -->
 						
 									</div>
 
 									<div class="box-right">
-									   <div class="form-group">
+									   
+									   <!--<div class="form-group">
 										    <label for="discount">折扣</label>
 										    <input name="discount" type="text" class="form-control" id="discount" placeholder="折扣" autocomplete="off" required="">
-										  </div>
-										<div class="form-group">
-												      <label for="is_sale">是否上架</label>
-												   <input name="is_sale"  type="radio" value="0" />上架&nbsp;&nbsp;
-												    <input name="is_sale"  type="radio" value="1" />下架
-										</div>
+										  </div>-->
 											
 										 <div class="form-group">
 										    <label for="discount">餐盒费</label>
 										    <input name="wrap_fee" type="text" class="form-control" id="wrap_fee" placeholder="餐盒费" autocomplete="off" required="">
 										  </div>
+										  
+										  	<div class="form-group">
+												      <label for="is_sale">是否上架</label>
+												   <input name="is_sale"  type="radio" value="0" />上架&nbsp;&nbsp;
+												    <input name="is_sale"  type="radio" value="1" />下架
+										</div>
 										  				
 										  <div class="form-group">
 										    <label for="backup">备注</label>
@@ -268,17 +267,15 @@
 									'success':function(res){
 										$('.box-3').find('input').eq(0).val(res.data.dish_name)
 										$('.box-3').find('input').eq(1).val(id);//给隐藏的ID赋值
-										$('.box-3').find('input').eq(3).val(res.data.price)	
-										$('.box-3').find('input').eq(5).val(res.data.count)
-										$('.box-3').find('input').eq(6).val(res.data.discount)
-										$('.box-3').find('input').eq(9).val(res.data.wrap_fee)
+										$('.box-3').find('input').eq(3).val(res.data.price/100)	
+										$('.box-3').find('input').eq(5).val(res.data.wrap_fee)
 										$('.box-3').find('textarea').eq(0).val(res.data.backup)
 										if(res.data.is_sale==1){
-											$('.box-3').find('input').eq(7).removeAttr('checked');
-											$('.box-3').find('input').eq(8).attr('checked','checked');
-										}else{
-											$('.box-3').find('input').eq(8).removeAttr('checked');
+											$('.box-3').find('input').eq(6).removeAttr('checked');
 											$('.box-3').find('input').eq(7).attr('checked','checked');
+										}else{
+											$('.box-3').find('input').eq(7).removeAttr('checked');
+											$('.box-3').find('input').eq(6).attr('checked','checked');
 										}
 									}
 								})

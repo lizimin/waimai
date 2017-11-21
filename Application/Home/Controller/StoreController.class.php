@@ -21,8 +21,8 @@ class StoreController extends AdminController {
 			$storeData ['address'] = $_POST ['address'];
 			$storeData ['contact'] = $_POST ['address'];
 			$storeData ['describe'] = $_POST ['describe'];
-			$storeData ['packing_fee'] = $_POST ['packing_fee'];
-			$storeData ['begin_price'] = $_POST ['begin_price'];
+			$storeData ['packing_fee'] = $_POST ['packing_fee']*100;
+			$storeData ['begin_price'] = $_POST ['begin_price']*100;
 			if (session ( 'user_id' ) == null || session ( 'brand_id' ) == null) {
 				$this->error ( 'login failed', '/Home/Login/pageLogin' );
 			}
@@ -78,6 +78,8 @@ class StoreController extends AdminController {
 				if (isset ( $info ['img'] )) {
 					$_POST ['img'] = '/Upload/' . $info ['img'] ['savepath'] . $info ['img'] ['savename'];
 					$model = M ( 'store' );
+					$$_POST ['packing_fee'] = $_POST ['packing_fee']*100;
+					$$_POST ['begin_price'] = $_POST ['begin_price']*100;
 					if ($model->where ( 'id=' . $_POST ['store_id'] )->save ( ($model->create ( $_POST )) )) {
 						$params = array (
 								'status' => 'success',
@@ -117,6 +119,8 @@ class StoreController extends AdminController {
 				$this->redirect ( 'Store/toStore', $params );
 				exit;
 			}
+			$img=$model->field('img')->where("id=".$_GET['id'])->select()[0];
+			unlink('./'.$img['img']);
 			if ($model->where ( "id=" . $_GET ['id'] )->delete ()) {
 				$params = array (
 						'status' => 'success',
@@ -243,6 +247,8 @@ class StoreController extends AdminController {
 				);
 				$this->redirect ( 'Store/storeManager', $params );
 			}else{
+				$img=$cate->field('img')->where("id=".$_GET['id'])->select()[0];
+				unlink('./'.$img['img']);
 				if($cate->where("id=".$_GET['id'])->delete()){
 					$params = array (
 							'status' => 'success',
@@ -296,6 +302,8 @@ class StoreController extends AdminController {
 				if (isset ( $info ['img'] )) {
 					$_POST ['img'] = '/Upload/' . $info ['img'] ['savepath'] . $info ['img'] ['savename'];
 					$model = M ( 'dish' );
+					$_POST['price']=$_POST['price']*100;
+					$_POST['wrap_fee']=$_POST['wrap_fee']*100;
 					if ($model->add ( $model->create ( $_POST ) )) {
 						$params = array (
 								'status' => 'success',
@@ -344,6 +352,8 @@ class StoreController extends AdminController {
 				if (isset ( $info ['img'] )) {
 					$_POST ['img'] = '/Upload/' . $info ['img'] ['savepath'] . $info ['img'] ['savename'];
 					$model = M ( 'dish' );
+					$_POST['price']=$_POST['price']*100;
+					$_POST['wrap_fee']=$_POST['wrap_fee']*100;
 					if ($model->where('id='.$_POST['dish_id'])->save( $model->create ( $_POST ) )) {
 						$params = array (
 								'status' => 'success',
@@ -363,6 +373,8 @@ class StoreController extends AdminController {
 	public function dishDelete(){
 		if(IS_GET){
 			$model=M('dish');
+			$img=$model->field('img')->where("id=".$_GET['id'])->select()[0];
+			unlink('./'.$img['img']);
 			if($model->where('id='.$_GET['id'])->delete()){
 				$params = array (
 								'status' => 'success',

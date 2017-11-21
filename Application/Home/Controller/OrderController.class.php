@@ -15,8 +15,12 @@ class OrderController extends AdminController {
 			$str_storeID .= ',' . $v ['id'];
 		}
 		$str_storeID = ltrim ( $str_storeID, ',' );
-		$sql = 'select o.*,s.store_name,a.name,a.phone from think_order o join think_store s on o.store_id=s.id join think_address a on o.address_id=a.id where store_id in (' . $str_storeID . ')';
-		$data = $model->query ( $sql );
+		if ($str_storeID == '') {
+			$data = array ();
+		} else {
+			$sql = 'select o.*,s.store_name,a.name,a.phone from think_order o join think_store s on o.store_id=s.id join think_address a on o.address_id=a.id where store_id in (' . $str_storeID . ')';
+			$data = $model->query ( $sql );
+		}
 		$this->assign ( 'data', $data );
 		$this->display ( 'Admin/Order/orderList' );
 	}
@@ -29,7 +33,7 @@ class OrderController extends AdminController {
 						'code' => 1,
 						'info' => 'fail please login again',
 						'data' => [ ],
-						'success'=>'fail', 
+						'success' => 'fail' 
 				] );
 				exit ();
 			}
@@ -49,45 +53,45 @@ class OrderController extends AdminController {
 					'code' => 0,
 					'info' => 'success',
 					'data' => $data,
-					'status'=>'success'
+					'status' => 'success' 
 			] );
 		}
-
 	}
-	
-	public function orderConfirm(){
-		if(IS_GET){
-			$id=$_GET['id'];
-			$model=M('order');
-			if($model->where("id=".$id)->save(['status'=>2])){
+	public function orderConfirm() {
+		if (IS_GET) {
+			$id = $_GET ['id'];
+			$model = M ( 'order' );
+			if ($model->where ( "id=" . $id )->save ( [ 
+					'status' => 2 
+			] )) {
 				$params = array (
 						'status' => 'success',
 						'info' => '确认成功!',
-						'pageName' => 'order',
-					
-				);
+						'pageName' => 'order' 
+				)
+				;
 				$this->redirect ( 'Order/orderList', $params );
-			}else{
-				echo $model->getError();
+			} else {
+				echo $model->getError ();
 			}
 		}
-		
 	}
-	
-	public function refoundConfirm(){
-		if(IS_GET){
-			$id=$_GET['id'];
-			$model=M('order');
-			if($model->where("id=".$id)->save(['status'=>2])){
+	public function refoundConfirm() {
+		if (IS_GET) {
+			$id = $_GET ['id'];
+			$model = M ( 'order' );
+			if ($model->where ( "id=" . $id )->save ( [ 
+					'status' => 2 
+			] )) {
 				$params = array (
 						'status' => 'success',
 						'info' => '确认退款成功',
-						'pageName' => 'order',
-							
-				);
+						'pageName' => 'order' 
+				)
+				;
 				$this->redirect ( 'Order/orderList', $params );
-			}else{
-				echo $model->getError();
+			} else {
+				echo $model->getError ();
 			}
 		}
 	}
